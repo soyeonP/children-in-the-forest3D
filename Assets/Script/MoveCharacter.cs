@@ -16,6 +16,7 @@ public class MoveCharacter : MonoBehaviour {
     
     private Rigidbody rb;
     private BoxCollider boxCollider;
+    private Animator ani;
 
     public Vector3 position;
 
@@ -24,6 +25,7 @@ public class MoveCharacter : MonoBehaviour {
     {
         //rb = GetComponent<Rigidbody>();
         //boxCollider = GetComponent<BoxCollider>();
+        ani = GetComponent<Animator>();
         position = transform.position;
 
     }
@@ -46,9 +48,12 @@ public class MoveCharacter : MonoBehaviour {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(fixEulers), turnSpeed * Time.deltaTime);
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
             //Add Move ani
+            ani.SetBool("Walk", true);
         }
-   
-        
+        else
+            ani.SetBool("Walk", false);
+
+
 
         /* else
          {

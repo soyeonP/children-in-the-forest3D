@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MovePointForCam : MonoBehaviour
 {
-    public Transform ClickPoint;
 
     /* camera target */
     public Transform target;
@@ -17,7 +16,6 @@ public class MovePointForCam : MonoBehaviour
     MoveCharacter CharA;
     MoveCharacter CharB;
     MoveCharacter CharC;
-   // MoveCharacter CharAll;
     JointoTogether CharAll_Join;
 
     public int MoveChar = 0 ; // 1 : A , 2 : B , 3: C 0: All  
@@ -50,7 +48,6 @@ public class MovePointForCam : MonoBehaviour
         CharA= GameObject.Find("ACharacter").GetComponent<MoveCharacter>();
         CharB = GameObject.Find("BCharacter").GetComponent<MoveCharacter>();
         CharC = GameObject.Find("CCharacter").GetComponent<MoveCharacter>();
-       // CharAll = GameObject.Find("Together").GetComponent<MoveCharacter>();
         CharAll_Join = GameObject.Find("Together").GetComponent<JointoTogether>();
     }
 
@@ -103,7 +100,6 @@ public class MovePointForCam : MonoBehaviour
             CharA.canMove = false;
             CharB.canMove = false;
             CharC.canMove = false;
-          // CharAll.canMove = true;
            CharAll_Join.join = true;
         }
 
@@ -270,10 +266,9 @@ public class MovePointForCam : MonoBehaviour
 
     }
 
-
+    /* 가까운 거리 연산 */
     public float DistanceToPoint(Vector3 a, Vector3 b)
-    {
-        Debug.Log("연산문");
+    {      
         return (float)Mathf.Sqrt(Mathf.Pow(a.x - b.x, 2) + Mathf.Pow(a.z - b.z, 2));
     }
 
