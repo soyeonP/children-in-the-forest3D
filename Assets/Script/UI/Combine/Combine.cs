@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Combine : MonoBehaviour
 {
     private DataManager dm;
+    private MovePointForCam move;
 
     private List<Dictionary<string, object>> recipeList;
     private Dictionary<string, object> recipe;
@@ -28,6 +29,8 @@ public class Combine : MonoBehaviour
         dm = DataManager.dataManager;
         recipeList = dm.GetRecipe();
 
+        move = GameObject.Find("Main Camera").GetComponent<MovePointForCam>();
+
         InitCombiner();
 
         // 레시피 리스트 개수만큼 버튼 생성
@@ -47,7 +50,27 @@ public class Combine : MonoBehaviour
         selectedChar = -1;
         btnCombine.interactable = false;
         combinable = false;
+
         // 레시피 획득 여부 확인하고 isGot에 1 들어간 애들 활성화 시켜줘
+
+        // 현재 선택된 캐릭터 기본 선택되도록 함
+        selectedChar = move.getMoveChar();
+
+        // 만약 전체 컨트롤 하고 있을 시 통찰력 제일 높은 아이로 설정
+        if (selectedChar == 4)
+        {
+            int maxIndex = 0;
+
+            for (int i = 0; i < playerStates.Count; i++)
+            {
+                if (playerStates[maxIndex].insight < playerStates[i].insight)
+                {
+                    maxIndex = i;
+                }
+            }
+
+            selectedChar = maxIndex;
+        }
     }
 
     private void MakeBtnRecipe(Dictionary<string, object> recipe)
@@ -153,32 +176,35 @@ public class Combine : MonoBehaviour
         }
 
         // 소지 재료 수 설정
-        for (int i = 0; i < System.Convert.ToInt16(recipe["matCount"]); i++)
+        if (itemInfo.activeInHierarchy)
         {
-            Item item_mat = dm.GetItem(System.Convert.ToString(recipe["mat" + (i + 1) + "ID"]));
-            Transform mat = costInfo.transform.GetChild(i);
-            Text txtNowMat = mat.GetChild(1).GetComponent<Text>();
-
-            int nowMat;
-
-            if (selectedChar == -1) nowMat = 0;
-            else nowMat = ObjManager.objManager.inventory.getItemCount(item_mat.ID, selectedChar);
-
-            txtNowMat.text = nowMat.ToString();
-
-            if (System.Convert.ToInt16(recipe["mat" + (i + 1) + "Need"]) > nowMat)
+            for (int i = 0; i < System.Convert.ToInt16(recipe["matCount"]); i++)
             {
-                txtNowMat.color = Color.red;
-                combinable = false;
+                Item item_mat = dm.GetItem(System.Convert.ToString(recipe["mat" + (i + 1) + "ID"]));
+                Transform mat = costInfo.transform.GetChild(i);
+                Text txtNowMat = mat.GetChild(1).GetComponent<Text>();
+
+                int nowMat;
+
+                if (selectedChar == -1) nowMat = 0;
+                else nowMat = ObjManager.objManager.inventory.getItemCount(item_mat.ID, selectedChar);
+
+                txtNowMat.text = nowMat.ToString();
+
+                if (System.Convert.ToInt16(recipe["mat" + (i + 1) + "Need"]) > nowMat)
+                {
+                    txtNowMat.color = Color.red;
+                    combinable = false;
+                }
+                else
+                {
+                    txtNowMat.color = Color.black;
+                }
             }
-            else
-            {
-                txtNowMat.color = Color.black;
-            }
+
+            // 제작 가능 여부 결정
+            checkCombinable();
         }
-
-        // 제작 가능 여부 결정
-        checkCombinable();
     }
 
     private void checkCombinable()

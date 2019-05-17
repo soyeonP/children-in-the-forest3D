@@ -30,18 +30,19 @@ public class Click : MonoBehaviour {
                     GetBtn.transform.position = new Vector2(mousePosition.x + 20, mousePosition.y + 20);
                     //GetBtn.transform.position = new Vector2(clickedObj.transform.position.x + 1, clickedObj.transform.position.y + 1);
                 }
-            }
-            else if (!EventSystem.current.IsPointerOverGameObject()) // 누른 오브젝트 없으면
-            {
-                GetBtn.SetActive(false);
-                clickedObj = null;
+                else
+                {
+                    GetBtn.SetActive(false);
+                    clickedObj = null;
+                }
             }
         }
 	}
 
     public void ClickedGetBtn()
     {
-        // 캐릭터에 따라조사시간 걸리게 설정
+        // 캐릭터에 따라조사시간 걸리게 설정 (해야함)
+
         clickedObj.GetComponent<Item>().AddItem();
         GetBtn.SetActive(false);
         clickedObj = null;

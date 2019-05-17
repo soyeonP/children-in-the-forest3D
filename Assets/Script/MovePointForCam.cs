@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MovePointForCam : MonoBehaviour
 {
@@ -11,15 +12,15 @@ public class MovePointForCam : MonoBehaviour
     public Transform targetB;
     public Transform targetC;
     public Transform targetAll;
-   
-    /*each character */ 
+
+    /*each character */
     MoveCharacter CharA;
     MoveCharacter CharB;
     MoveCharacter CharC;
     JointoTogether CharAll_Join;
 
-    public int MoveChar = 0 ; // 1 : A , 2 : B , 3: C 0: All  
-    
+    public int MoveChar = 0; // 1 : A , 2 : B , 3: C 0: All  
+
     //camera limit 
     public const float offsetX = 0f;
     public const float offsetY = 20f;
@@ -40,12 +41,17 @@ public class MovePointForCam : MonoBehaviour
 
     public float[] dirLen;
 
+    public int getMoveChar()
+    {
+        return MoveChar;
+    }
+
     private void Start()
     {
         tr = GetComponent<Transform>();
         target = targetA;
 
-        CharA= GameObject.Find("ACharacter").GetComponent<MoveCharacter>();
+        CharA = GameObject.Find("ACharacter").GetComponent<MoveCharacter>();
         CharB = GameObject.Find("BCharacter").GetComponent<MoveCharacter>();
         CharC = GameObject.Find("CCharacter").GetComponent<MoveCharacter>();
         CharAll_Join = GameObject.Find("Together").GetComponent<JointoTogether>();
@@ -54,22 +60,22 @@ public class MovePointForCam : MonoBehaviour
     void Update()
     {
         //follow Character 
-        cameraPosition = new Vector3(target.position.x + 2f , offsetY, target.position.z -9f );
+        cameraPosition = new Vector3(target.position.x + 2f, offsetY, target.position.z - 9f);
 
-        if (target.position.x +2f > limitright)
-            cameraPosition.x  = limitright;
-        else if (target.position.x +2f < -(limitright))
+        if (target.position.x + 2f > limitright)
+            cameraPosition.x = limitright;
+        else if (target.position.x + 2f < -(limitright))
             cameraPosition.x = -(limitright);
 
-        if (target.position.z -9f> limittop)
+        if (target.position.z - 9f > limittop)
             cameraPosition.z = limittop;
-        else if (target.position.z -9f < -(limittop))
+        else if (target.position.z - 9f < -(limittop))
             cameraPosition.z = -(limittop);
 
         transform.position = Vector3.Lerp(tr.position, cameraPosition, followSpeed * Time.deltaTime);
 
-        /*character choose */ 
-        if (Input.GetKey("q"))
+        /*character choose */
+        if (Input.GetKey("q") || MoveChar == 1)
         {
             target = targetA;
             CharA.canMove = true;
@@ -77,7 +83,7 @@ public class MovePointForCam : MonoBehaviour
             CharC.canMove = false;
             CharAll_Join.join = false;
         }
-        if (Input.GetKey("w"))
+        if (Input.GetKey("w") || MoveChar == 2)
         {
             target = targetB;
             CharA.canMove = false;
@@ -85,7 +91,7 @@ public class MovePointForCam : MonoBehaviour
             CharC.canMove = false;
             CharAll_Join.join = false;
         }
-        if (Input.GetKey("e"))
+        if (Input.GetKey("e") || MoveChar == 3)
         {
             target = targetC;
             CharA.canMove = false;
@@ -94,7 +100,7 @@ public class MovePointForCam : MonoBehaviour
             CharAll_Join.join = false;
         }
         
-        if (Input.GetKey("r"))
+        if (Input.GetKey("r") || MoveChar == 4)
         {
            // target = targetAll;
             CharA.canMove = false;
@@ -137,7 +143,7 @@ public class MovePointForCam : MonoBehaviour
 
     void getPosition()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.currentSelectedGameObject)
         {
             Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit Hit;
