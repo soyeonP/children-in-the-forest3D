@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerState : MonoBehaviour
 {
@@ -8,9 +9,84 @@ public class playerState : MonoBehaviour
     public float full = 10;             // 포만감
     public float scare = 10;            // 공포
     public int insight;                 // 통찰력
+    public int charNum;
 
     private bool isSelected = false;    // 현재 선택되었는가 여부
+
+    /* 조합 부분 */
+    public bool isWorking = false;     // 작업중 여부
+
+    private int min, sec;      // 남은 조합 시간
+    private float dt;
+    private Dictionary<string, object> recipe; // 만들고 있는 아이템 레시피 정보
+    private Text txtLeftTime;
+    private GameObject ui;
+    public GameObject askMsg;
+
     public bool IsSelected() { return isSelected; }
+    public bool IsWorking() { return isWorking; }
+
+    public void SetWorking() { isWorking = !isWorking; }
+
+    public void StartCombine(Dictionary<string, object> recipe, GameObject ui)
+    {
+        SetWorking();
+
+        int time = System.Convert.ToInt32(recipe["time"]);
+        min = time / 60;
+        sec = time % 60;
+
+        this.recipe = recipe;
+        this.ui = ui;
+        ui.transform.GetChild(0).GetComponent<Image>().sprite = DataManager.dataManager.findSprite(System.Convert.ToString(recipe["comID"]));
+        txtLeftTime = ui.transform.GetChild(1).GetComponent<Text>();
+        txtLeftTime.text = min + " : " + sec;
+
+        txtLeftTime.transform.parent.GetComponent<Button>().onClick.AddListener(() =>
+        { 
+            askMsg.SetActive(true);
+            askMsg.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() =>
+            {
+                CancleCombine();
+                askMsg.SetActive(false);
+            });
+        });
+    }
+
+    private void CompleteCombine()
+    {
+        txtLeftTime.text = "제작완료!";
+
+        txtLeftTime.transform.parent.GetComponent<Button>().onClick.RemoveAllListeners();
+        txtLeftTime.transform.parent.GetComponent<Button>().onClick.AddListener(GetCombItem);
+    }
+
+    private void CancleCombine()
+    {
+        SetWorking();
+        Destroy(ui);
+        ui = null;
+    }
+
+    private void GetCombItem()
+    {
+
+        // 인벤토리 가득찼는지 여부 확인
+        if (ObjManager.objManager.inventory.AddItem(charNum - 1, DataManager.dataManager.GetItem(System.Convert.ToString(recipe["comID"]))))
+        {
+            SetWorking();
+            Destroy(ui);
+            ui = null;
+            Debug.Log("획득 완료");
+        }
+        else
+        {
+            txtLeftTime.text = "자리 부족";
+            Debug.Log("자리 없음");
+        }
+    }
+
+    /* 조합 부분 끝 */
 
     void Update()
     {
@@ -19,6 +95,31 @@ public class playerState : MonoBehaviour
             hp -= (0.1f * Time.deltaTime);
            //플레이어 사망 클래스만들고/ 클래스 소환. 
         //음식아이템 섭취시 stamina 증가
+
+        if (ui != null) ui.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+
+        // 조합 중일 시 시간 ui 설정
+        if (isWorking)
+        {
+            dt += Time.deltaTime;
+
+            if (dt >= 1)
+            {
+                dt = 0;
+                if (--sec < 0)
+                {
+                    if (--min <= 0)
+                    {
+                        CompleteCombine(); // 조합 완료 함수
+                        return;
+                    }
+
+                    sec = 59;
+                }
+
+                txtLeftTime.text = min + " : " + sec;
+            }
+        }
     }
 
     public void ChangeHP(float value)

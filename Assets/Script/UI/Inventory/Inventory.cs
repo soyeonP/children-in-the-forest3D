@@ -121,17 +121,38 @@ public class Inventory : MonoBehaviour {
     {
         int startSlotNum = ChildNum * 6; // 해당 번호 애기 인벤토리 시작 인덱스
         
-        for (int i = 0; i < 6; i++)
+        for (int i = startSlotNum; i < startSlotNum + 6; i++)
         {
             Slot slot = slots[i].GetComponent<Slot>();
 
-            if (slot.isSlots()) // 슬롯이 비어 있으면 아래 줄 실행
+            if (slot.isSlots()) // 슬롯이 비어 있으면 if문 바깥 줄 실행
                 continue; // 차있으면(true) i++
 
             slot.AddItem(item);
             return true;
         }
         
+        return false;
+    }
+
+    public bool RemoveItem(int childNum, string id)
+    {
+        int startSlotNum = (childNum - 1) * 6;
+
+        for (int i = startSlotNum; i < startSlotNum + 6; i++)
+        {
+            Slot slot = slots[i].GetComponent<Slot>();
+
+            if (slot.isSlots())
+            {
+                if (slot.ItemReturn().ID == id)
+                {
+                    slot.ThrowItem();
+                    return true;
+                }
+            }
+        }
+        Debug.Log("아이템 제거 실패, " + id);
         return false;
     }
 

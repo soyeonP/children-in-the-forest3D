@@ -68,6 +68,7 @@
     <Compile Include="Assets\Script\Object\ItemSpawner.cs" />
     <Compile Include="Assets\Script\playerState.cs" />
     <Compile Include="Assets\Script\UI\Combine\Combine.cs" />
+    <Compile Include="Assets\Script\UI\Combine\CombineUI.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Click.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Inventory.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Item.cs" />

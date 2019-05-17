@@ -21,7 +21,7 @@ public class Click : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity) && !EventSystem.current.IsPointerOverGameObject())
             {
                 if (hit.collider.gameObject.tag == "Object") // 오브젝트 클릭했으면
                 {
@@ -42,8 +42,12 @@ public class Click : MonoBehaviour {
     public void ClickedGetBtn()
     {
         // 캐릭터에 따라조사시간 걸리게 설정 (해야함)
+        Debug.Log("a");
+        int charnum = GameObject.Find("Main Camera").GetComponent<MovePointForCam>().getMoveChar();
 
-        clickedObj.GetComponent<Item>().AddItem();
+        if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;
+
+        clickedObj.GetComponent<Item>().AddItem(charnum - 1);
         GetBtn.SetActive(false);
         clickedObj = null;
     }

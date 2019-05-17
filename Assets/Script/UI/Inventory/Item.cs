@@ -28,11 +28,11 @@ public class Item : MonoBehaviour
         //sprite = gameObject.GetComponent<SpriteRenderer>().sprite;
     }
 
-    public void AddItem() // 인벤토리에 해당 아이템 넣기
+    public void AddItem(int charNum) // 인벤토리에 해당 아이템 넣기
     {
         /* 어떤 애기가 먹었는지 가져와야 함 */
 
-        if (!iv.AddItem(0, this)) // 해당 애기의 인벤토리 자리 없을 경우
+        if (!iv.AddItem(charNum, this)) // 해당 애기의 인벤토리 자리 없을 경우
         {
             Debug.Log("가득참");
         }

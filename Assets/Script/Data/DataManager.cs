@@ -83,10 +83,6 @@ public class DataManager : MonoBehaviour {
 
     }
 
-    public List<Dictionary<string, object>> GetRecipe()
-    {
-        return recipeList;
-    }
 
     public string getName(string id)
     {
@@ -179,4 +175,26 @@ public class DataManager : MonoBehaviour {
     }
 
     /* 아이템 리스트 Get 함수 끝 */
+
+    /* 레시피 리스트 함수 */
+
+    public List<Dictionary<string, object>> GetRecipeList()
+    {
+        return recipeList;
+    }
+
+    public Dictionary<string, object> GetRecipe(string id)
+    {
+        Dictionary<string, object> recipe = null;
+
+        for (int i = 0; i < recipeList.Count; i++)
+        {
+            if (System.Convert.ToString(recipeList[i]["comID"]) == id)
+            {
+                recipe = recipeList[i];
+            }
+        }
+
+        return recipe;
+    }
 }
