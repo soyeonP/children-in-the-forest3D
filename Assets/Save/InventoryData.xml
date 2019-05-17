@@ -1,5 +1,6 @@
 <Child>
   <Item name="독초" ID="b_hurb" des="" tool="0" effect="체력 -50" slotNum="0" type="food" />
+  <Item name="송이버섯" ID="song2_m" des="" tool="0" effect="포만감 +2" slotNum="1" type="food" />
   <Item name="나뭇가지" ID="branch" des="" tool="0" effect="사용 불가" slotNum="12" type="food" />
   <Item name="독초" ID="b_hurb" des="" tool="0" effect="체력 -50" slotNum="13" type="food" />
   <Item name="버섯 수프" ID="mushroom_soup" des="" tool="0" effect="허기 50 회복" slotNum="14" type="food" />
