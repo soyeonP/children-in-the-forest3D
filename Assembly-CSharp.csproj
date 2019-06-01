@@ -62,11 +62,13 @@
   <ItemGroup>
     <Compile Include="Assets\Script\Data\CSVReader.cs" />
     <Compile Include="Assets\Script\Data\DataManager.cs" />
+    <Compile Include="Assets\Script\DatabaseManager.cs" />
     <Compile Include="Assets\Script\JointoTogether.cs" />
     <Compile Include="Assets\Script\MoveCharacter.cs" />
     <Compile Include="Assets\Script\MovePointForCam.cs" />
     <Compile Include="Assets\Script\Object\ItemSpawner.cs" />
     <Compile Include="Assets\Script\playerState.cs" />
+    <Compile Include="Assets\Script\SaveLoad.cs" />
     <Compile Include="Assets\Script\UI\Combine\Combine.cs" />
     <Compile Include="Assets\Script\UI\Combine\CombineUI.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Click.cs" />

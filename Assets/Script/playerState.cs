@@ -23,6 +23,8 @@ public class playerState : MonoBehaviour
     private GameObject ui;
     public GameObject askMsg;
 
+    private SaveLoad saveNLoad;
+
     public bool IsSelected() { return isSelected; }
     public bool IsWorking() { return isWorking; }
 
@@ -87,11 +89,23 @@ public class playerState : MonoBehaviour
     }
 
     /* 조합 부분 끝 */
+    private void Start()
+    {
+        saveNLoad = FindObjectOfType<SaveLoad>();
+
+        if(saveNLoad.IsSave == true)
+        saveNLoad.CallLoad(); //load data
+    }
 
     void Update()
     {
+    
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+           saveNLoad.CallSave();//save data
+        }
         //몬스터가 공격시 hp 감소
-        if(hp > 0)
+        if (hp > 0)
             hp -= (0.1f * Time.deltaTime);
            //플레이어 사망 클래스만들고/ 클래스 소환. 
         //음식아이템 섭취시 stamina 증가

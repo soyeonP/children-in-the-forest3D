@@ -25,9 +25,9 @@ public class MovePointForCam : MonoBehaviour
     public const float offsetX = 0f;
     public const float offsetY = 20f;
     public const float offsetZ = 0f;
-    public float limitright = 10f;
+    public float limitright = 50f;
     //public float limitleft = -10f;
-    public float limittop = 10f;
+    public float limittop = 50f;
     //public float limitbottom = -10f;
 
     public float followSpeed = 10.0f;
@@ -60,7 +60,7 @@ public class MovePointForCam : MonoBehaviour
     void Update()
     {
         //follow Character 
-        cameraPosition = new Vector3(target.position.x + 2f, offsetY, target.position.z - 9f);
+        cameraPosition = new Vector3(target.position.x + 2f, offsetY, target.position.z - 16f);
 
         if (target.position.x + 2f > limitright)
             cameraPosition.x = limitright;
@@ -75,6 +75,7 @@ public class MovePointForCam : MonoBehaviour
         transform.position = Vector3.Lerp(tr.position, cameraPosition, followSpeed * Time.deltaTime);
 
         /*character choose */
+
         if (Input.GetKey("q") || MoveChar == 1)
         {
             target = targetA;
@@ -154,9 +155,8 @@ public class MovePointForCam : MonoBehaviour
 
                 switch (MoveChar)
                 {
-                    case 0:    //playerAll
-                               // target = targetAll;
-                       // CharAll.position = Hit.point;
+                    case 0:
+
                         break;
                     case 1:    //playerA
                         target = targetA;

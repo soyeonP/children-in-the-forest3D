@@ -10,8 +10,7 @@ public class MoveCharacter : MonoBehaviour {
      public float moveSpeed = 5f;
      public float turnSpeed = 5f;
      public bool join = false; // true : 조인 진행중 false : 조인끝 or 조인상태x
-      public bool canMove = true;
-
+      public bool canMove = false;
     public GameObject Together;
     
     private Rigidbody rb;
@@ -20,12 +19,19 @@ public class MoveCharacter : MonoBehaviour {
 
     public Vector3 position;
 
+    /*save load 용 */
+    private SaveLoad saveNLoad; 
+
     // Start is called before the first frame update
     void Start()
     {
-        //rb = GetComponent<Rigidbody>();
-        //boxCollider = GetComponent<BoxCollider>();
         ani = GetComponent<Animator>();
+      
+
+        saveNLoad = FindObjectOfType<SaveLoad>();
+       // if (saveNLoad.IsSave == true)
+            saveNLoad.CallLoad(); //load data
+
         position = transform.position;
 
     }
@@ -33,8 +39,12 @@ public class MoveCharacter : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.F5))
+        {
+            saveNLoad.CallSave();//save data
+        }
 
-            float fDistance = Vector3.Distance(transform.position, position);
+        float fDistance = Vector3.Distance(transform.position, position);
 
         if (fDistance > 1.5f)
         {
