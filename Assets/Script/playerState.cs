@@ -11,6 +11,10 @@ public class playerState : MonoBehaviour
     public int insight;                 // 통찰력
     public int charNum;
 
+    public Slider hpBar;
+    public Slider fullBar;
+    public Slider scareBar;
+
     private bool isSelected = false;    // 현재 선택되었는가 여부
 
     /* 조합 부분 */
@@ -125,6 +129,10 @@ public class playerState : MonoBehaviour
                 txtLeftTime.text = min + " : " + sec;
             }
         }
+
+        hpBar.value = hp;
+        fullBar.value = full;
+        scareBar.value = scare;
     }
 
     public void ChangeHP(float value)
@@ -147,5 +155,21 @@ public class playerState : MonoBehaviour
          */
 
         full += value;
+    }
+
+    public float GetHP()
+    {
+     
+        return hp;
+    }
+    public float GetFull()
+    {
+     
+        return full;
+    }
+    public float GetScare()
+    {
+
+        return scare;
     }
 }
