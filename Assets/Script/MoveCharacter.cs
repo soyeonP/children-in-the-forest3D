@@ -37,10 +37,7 @@ public class MoveCharacter : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F5))
-        {
-            saveNLoad.CallSave();//save data
-        }
+
         if (Input.GetKeyDown(KeyCode.F9))
         {
             saveNLoad.CallLoad();//save data
@@ -65,14 +62,18 @@ public class MoveCharacter : MonoBehaviour {
         else
             ani.SetBool("Walk", false);
 
+    }
 
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            saveNLoad.CallSave();
+        }
+    }
 
-        /* else
-         {
-             //stay : Idle ani 
-         }
-         */
-
-
+    private void OnApplicationQuit()
+    {
+        saveNLoad.CallSave();
     }
 }
