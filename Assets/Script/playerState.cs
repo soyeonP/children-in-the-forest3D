@@ -89,21 +89,12 @@ public class playerState : MonoBehaviour
     }
 
     /* 조합 부분 끝 */
-    private void Start()
-    {
-        saveNLoad = FindObjectOfType<SaveLoad>();
-
-        if(saveNLoad.IsSave == true)
-        saveNLoad.CallLoad(); //load data
-    }
+ 
 
     void Update()
     {
     
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-           saveNLoad.CallSave();//save data
-        }
+    
         //몬스터가 공격시 hp 감소
         if (hp > 0)
             hp -= (0.1f * Time.deltaTime);

@@ -29,9 +29,7 @@ public class MoveCharacter : MonoBehaviour {
       
 
         saveNLoad = FindObjectOfType<SaveLoad>();
-       // if (saveNLoad.IsSave == true)
-            saveNLoad.CallLoad(); //load data
-
+        //game start 누르면 load하기 
         position = transform.position;
 
     }
@@ -43,7 +41,11 @@ public class MoveCharacter : MonoBehaviour {
         {
             saveNLoad.CallSave();//save data
         }
-
+        if (Input.GetKeyDown(KeyCode.F9))
+        {
+            saveNLoad.CallLoad();//save data
+            position = transform.position;
+        }
         float fDistance = Vector3.Distance(transform.position, position);
 
         if (fDistance > 1.5f)

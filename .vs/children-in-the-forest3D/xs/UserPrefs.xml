@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{21C586A5-A396-008B-8945-2B4AD36182CD}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/playerState.cs">
+    <Files>
+      <File FileName="Assets/Script/SaveLoad.cs" Line="1" Column="1" />
+      <File FileName="Assets/Script/MoveCharacter.cs" Line="32" Column="33" />
+      <File FileName="Assets/Script/playerState.cs" Line="97" Column="42" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
