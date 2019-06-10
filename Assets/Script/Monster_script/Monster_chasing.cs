@@ -24,8 +24,7 @@ public class Monster_chasing : MonoBehaviour
 
     void Update()
     {
-        if (!GameObject.FindGameObjectWithTag("monster").GetComponent<vision_of_monster>()
-            .thereismeat)
+        if (!(gameObject.GetComponentInChildren<vision_of_monster>().thereismeat))
             Move();
         
 
