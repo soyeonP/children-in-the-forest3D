@@ -11,12 +11,13 @@ public class Monster_chasing : MonoBehaviour
     //public Animator empty_stomach;//공복상태일떄의 애니메이션
     //int hunger = 100;//몬스터의 허기상태, 0이 되묜 공복상태로 변한다.
 
-    
+    Animator anime;
 
     // Start is called before the first frame update
 
     void Start()
     {
+        anime = GetComponent<Animator>();
         // empty_stomach = GetComponent<Animator>();
         // Invoke("monster_is_hungry", 10f);
     }
@@ -26,6 +27,9 @@ public class Monster_chasing : MonoBehaviour
     {
         if (!(gameObject.GetComponentInChildren<vision_of_monster>().thereismeat))
             Move();
+
+        if (gameObject.GetComponentInChildren<vision_of_monster>().thereismeat)
+            anime.SetBool("mon_walk", false);
         
 
         /*
@@ -38,6 +42,7 @@ public class Monster_chasing : MonoBehaviour
 
     private void Move()
     {
+        anime.SetBool("mon_walk", true);
         if (waypointIndex < waypoints.Length)
         {
             transform.position = Vector3.MoveTowards(transform.position
@@ -52,6 +57,7 @@ public class Monster_chasing : MonoBehaviour
         {
             waypointIndex = 0;
         }
+        //anime.SetBool("mon_walk", false);
     }
 
     

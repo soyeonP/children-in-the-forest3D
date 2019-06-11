@@ -16,18 +16,21 @@ public class vision_of_monster : MonoBehaviour
     public GameObject poisened_meat;   //독고기
     public bool thereismeat = false;
 
+    public Vector3 targetPosition; //쫓을 대상(밑에targetsetting함수로 정함)
+
+    Animator anime;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        anime = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
+       
 
     }
 
@@ -51,40 +54,51 @@ public class vision_of_monster : MonoBehaviour
     {
         if (coll.tag == "pmeat")
         {
-            GameObject.FindGameObjectWithTag("monster").transform.LookAt(poisened_meat.transform);
-            GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.05f);
+            targetsetting(poisened_meat);
+            GameObject.FindGameObjectWithTag("monster").transform.LookAt(targetPosition);
+            GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.08f);
+            anime.SetBool("mon_run", true);
         }
 
 
         else if (coll.tag == "Player")
         {
-            if (count_player_entered == 1)
+            if(count_player_entered == 1)
             {
-                monster.transform.LookAt(coll.gameObject.transform);
-                monster.transform.Translate(Vector3.forward * 0.05f);
+                if (!thereismeat)
+                {
+                    targetsetting(coll.gameObject);
+                    monster.transform.LookAt(targetPosition);
+                    monster.transform.Translate(Vector3.forward * 0.08f);
+                    anime.SetBool("mon_walk", true);
+                }
             }
 
             else
             {
-                for (int i = 0; i < 3; i++)//몬스터와 플레이어사이 거리를 계산하는루프
+                if (!thereismeat)
                 {
-                    distance[i] = monster.transform.position - Player[i].transform.position;
-                    sqrdistance[i] = distance[i].sqrMagnitude;
-                }
-
-                Min = sqrdistance[0];
-
-                for (int i = 0; i < 3; i++)//최소 거리를 Min에 집어넣기
-                {
-                    if (sqrdistance[i] <= Min)
+                    for (int i = 0; i < 3; i++)//몬스터와 플레이어사이 거리를 계산하는루프
                     {
-                        Min = sqrdistance[i];
-                        player_monster_chased = Player[i];//최소거리를 갖는 플레이어를 지칭해주기
+                        distance[i] = monster.transform.position - Player[i].transform.position;
+                        sqrdistance[i] = distance[i].sqrMagnitude;
                     }
-                }
-                monster.transform.LookAt(player_monster_chased.transform);//지칭된 플레이어를 쫓아가기
-                monster.transform.Translate(Vector3.forward * 0.05f);
 
+                    Min = sqrdistance[0];
+
+                    for (int i = 0; i < 3; i++)//최소 거리를 Min에 집어넣기
+                    {
+                        if (sqrdistance[i] <= Min)
+                        {
+                            Min = sqrdistance[i];
+                            player_monster_chased = Player[i];//최소거리를 갖는 플레이어를 지칭해주기
+                        }
+                    }
+                    targetsetting(player_monster_chased);
+                    monster.transform.LookAt(targetPosition);//지칭된 플레이어를 쫓아가기
+                    monster.transform.Translate(Vector3.forward * 0.08f);
+                    anime.SetBool("mon_walk", true);
+                }
 
 
             }
@@ -96,12 +110,23 @@ public class vision_of_monster : MonoBehaviour
         if (coll2.tag == "Player")
         {
             count_player_entered--;
+            if(count_player_entered == 0)
+            {
+                anime.SetBool("mon_walk", false);
+            }
 
         }
 
         if (coll2.tag == "pmeat")
         {
             thereismeat = false;
+            anime.SetBool("mon_run", false);
         }
     }
+
+    private void targetsetting(GameObject target)
+    {
+        targetPosition = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z);
+    }
+
 }
