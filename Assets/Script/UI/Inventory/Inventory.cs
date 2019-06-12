@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour {
     public GameObject CharactersParent; // 플레이어 캐릭터들 Parent
     public Transform InfoSlot; // 인벤토리의 설명 슬롯
 
+    public GameObject memoPanel; // 메모 패널
     private Button checkBtn; // 설명 슬롯의 조사 버튼
     private Button useBtn; // 설명 슬롯의 사용 버튼
     private Button trashBtn; // 설명 슬롯의 버리기 버튼
@@ -273,5 +274,16 @@ public class Inventory : MonoBehaviour {
                 count++;
         }
         return count;
+    }
+
+    public void OpenMemo(string id)
+    {
+        memoPanel.SetActive(true);
+
+        // 제목 설정
+        memoPanel.transform.GetChild(1).GetComponent<Text>().text = "제목";
+
+        // 내용 설정
+        memoPanel.transform.GetChild(1).GetComponent<Text>().text = "내용";
     }
 }

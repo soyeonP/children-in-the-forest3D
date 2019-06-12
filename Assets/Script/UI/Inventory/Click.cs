@@ -7,11 +7,17 @@ using UnityEngine.EventSystems;
 public class Click : MonoBehaviour {
 
     public GameObject GetBtn;
+    public GameObject huntBtn;
     public GameObject clickedObj;
+
+    public GameObject bullet;
+
+    private MovePointForCam move;
 
     private void Start()
     {
         GetBtn.SetActive(false);
+        move = GameObject.Find("Main Camera").GetComponent<MovePointForCam>();
     }
 
     private void Update () {
@@ -30,9 +36,23 @@ public class Click : MonoBehaviour {
                     GetBtn.transform.position = new Vector2(mousePosition.x + 20, mousePosition.y + 20);
                     //GetBtn.transform.position = new Vector2(clickedObj.transform.position.x + 1, clickedObj.transform.position.y + 1);
                 }
+                else if (hit.collider.gameObject.tag == "Huntable")
+                {
+                    // TODO 새총 보유중인지 확인
+                    int nowChar = move.getMoveChar();
+                    //if (ObjManager.objManager.inventory.getItemCount("slinger", nowChar) > 0) {
+                    // 아직 새총 추가 안돼서 조건 안 걸어둠
+                        clickedObj = hit.collider.gameObject;
+
+                        // 상호작용 버튼 출력
+                        huntBtn.SetActive(true);
+                        huntBtn.transform.position = new Vector2(mousePosition.x + 20, mousePosition.y + 20);
+                    //}
+                }
                 else
                 {
                     GetBtn.SetActive(false);
+                    huntBtn.SetActive(false);
                     clickedObj = null;
                 }
             }
@@ -41,7 +61,7 @@ public class Click : MonoBehaviour {
 
     public void ClickedGetBtn()
     {
-        // 캐릭터에 따라조사시간 걸리게 설정 (해야함)
+        // 캐릭터에 따라 조사시간 걸리게 설정 (해야함)
         Debug.Log("a");
         int charnum = GameObject.Find("Main Camera").GetComponent<MovePointForCam>().getMoveChar();
 
@@ -50,5 +70,18 @@ public class Click : MonoBehaviour {
         clickedObj.GetComponent<Item>().AddItem(charnum - 1);
         GetBtn.SetActive(false);
         clickedObj = null;
+    }
+
+    public void ClickedHuntBtn()
+    {
+        // 탄환 발사 이펙트
+        //GameObject bul = Instantiate(bullet);
+        //bul.GetComponent<Rigidbody>().AddForce
+
+
+        // 일단 걍 토끼가 죽게 하자
+        clickedObj.GetComponent<Huntable>().Kill();
+        // 사냥 버튼 끄기
+        huntBtn.SetActive(false);
     }
 }

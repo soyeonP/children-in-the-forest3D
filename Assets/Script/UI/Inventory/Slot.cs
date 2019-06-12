@@ -77,11 +77,28 @@ public class Slot : MonoBehaviour {
     {
         // 해당 아이템 가지고 있는 캐릭터 가져와 상태값 변경
         DataManager dm = DataManager.dataManager;
-        childNum = System.Convert.ToInt32(gameObject.name) / 6;
-        Children = dm.GetChildren();
-        playerState character = Children[childNum].GetComponent<playerState>();
-        character.ChangeFull(dm.GetFull(item.ID));
-        character.ChangeHP(dm.GetHP(item.ID));
+
+
+        switch (item.type)
+        {
+            case Item.ItemType.food:
+                childNum = System.Convert.ToInt32(gameObject.name) / 6;
+                Children = dm.GetChildren();
+                playerState character = Children[childNum].GetComponent<playerState>();
+                character.ChangeFull(dm.GetFull(item.ID));
+                character.ChangeHP(dm.GetHP(item.ID));
+                break;
+
+            case Item.ItemType.memo:
+                // 메모 패널 열기
+                // 메모 글 불러오기
+                ObjManager.objManager.inventory.OpenMemo(item.ID);
+                break;
+        }
+
+        /* 아이템 타입이 음식일 시 */
+
+
 
         /* 아이템 비우고 인벤토리 새로고침 */
         dm.GotItem(item.ID);

@@ -15,6 +15,9 @@ public class DataManager : MonoBehaviour {
     /* 조합 레시피 리스트 */
     private List<Dictionary<string, object>> recipeList;
 
+    /* 사냥 가능 오브젝트 리스트 */
+    private List<Dictionary<string, object>> huntableList;
+
     public GameObject[] children;
 
     public static DataManager dataManager
@@ -46,6 +49,8 @@ public class DataManager : MonoBehaviour {
         /* 오브젝트 아이템 리스트 로드 */
         itemList = CSVReader.Read("Data/itemList");
         recipeList = CSVReader.Read("Data/RecipeList");
+        huntableList = CSVReader.Read("Data/huntableTable");
+
         items = new List<Item>();
 
         for (int i = 0; i < itemList.Count; i++)
@@ -174,6 +179,7 @@ public class DataManager : MonoBehaviour {
         return -1;
     }
 
+
     /* 아이템 리스트 Get 함수 끝 */
 
     /* 레시피 리스트 함수 */
@@ -196,5 +202,47 @@ public class DataManager : MonoBehaviour {
         }
 
         return recipe;
+    }
+
+    /* 레시피 리스트 함수 끝 */
+
+
+    /* 스크립트 리스트 함수 */
+
+    // 메모 스크립트 텍스트 가져오기
+
+    /*  메모 스크립트 테이블 필요
+    public string GetText(string id, int context)
+    {
+        string txt;
+
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            if (itemList[i]["ID"].ToString() == id)
+            {
+                return System.Convert.ToSingle(itemList[i]["full"].ToString());
+            }
+        }
+
+        return txt;
+    }
+    */
+
+    /* 사냥 가능 오브젝트 리스트 함수 */
+    public Dictionary<string, object> GetHuntable(string id)
+    {
+        Dictionary<string, object> huntable = null;
+
+        for (int i = 0; i < huntableList.Count; i++)
+        {
+            Debug.Log(System.Convert.ToString(huntableList[i]["ID"]));
+            if (System.Convert.ToString(huntableList[i]["ID"]) == id)
+            {
+                huntable = huntableList[i];
+                Debug.Log("D");
+            }
+        }
+
+        return huntable;
     }
 }

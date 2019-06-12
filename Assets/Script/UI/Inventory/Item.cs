@@ -6,7 +6,6 @@ public class Item : MonoBehaviour
 {
     public string name; // 아이템 이름
     public string ID; // 아이템 식별 번호
-    public string des; // 아이템 설명
     public string tool; // 채집에 필요한 도구
     public Sprite sprite; // 아이템 이미지
     public ItemType type; // 아이템 종류

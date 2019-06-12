@@ -10,6 +10,7 @@ TagManager:
   - right
   - DragImg
   - Object
+  - Huntable
   layers:
   - Default
   - TransparentFX

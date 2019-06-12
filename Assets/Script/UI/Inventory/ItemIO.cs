@@ -28,7 +28,6 @@ public sealed class ItemIO : MonoBehaviour {
 
                 setting.SetAttribute("name", item.name);
                 setting.SetAttribute("ID", item.ID);
-                setting.SetAttribute("des", item.des);
                 setting.SetAttribute("tool", item.tool.ToString());
                 setting.SetAttribute("effect", item.effect);
                 setting.SetAttribute("slotNum", i.ToString());
@@ -77,7 +76,6 @@ public sealed class ItemIO : MonoBehaviour {
 
             item.name = itemElement.GetAttribute("name");
             item.ID = itemElement.GetAttribute("ID");
-            item.des = itemElement.GetAttribute("des");
             item.effect = itemElement.GetAttribute("effect");
             item.tool = itemElement.GetAttribute("tool");
             item.sprite = DataManager.dataManager.findSprite(item.ID);

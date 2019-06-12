@@ -22,16 +22,7 @@ public class ItemSpawner : MonoBehaviour {
         {
             Item item = items[Random.Range(0, items.Count)];
 
-            GameObject obj = Instantiate(objPrefab, objParent.transform);
-            Item itemCompo = obj.GetComponent<Item>();
-
-            itemCompo.name = item.name;
-            itemCompo.ID = item.ID;
-            itemCompo.des = item.des;
-            itemCompo.tool = item.tool;
-            itemCompo.sprite = item.sprite;
-            itemCompo.type = item.type;
-            itemCompo.effect = item.effect;
+            GameObject obj = SpawnObj(item);
 
             /* 오브젝트 생성 - 테스트용으로 화면 안에서만 */
             obj.transform.position = new Vector3(Random.Range(-Camera.main.orthographicSize, Camera.main.orthographicSize),
@@ -44,4 +35,18 @@ public class ItemSpawner : MonoBehaviour {
         }
     }
 
+    public GameObject SpawnObj(Item item) 
+    {
+        GameObject obj = Instantiate(objPrefab, objParent.transform);
+        Item itemCompo = obj.GetComponent<Item>();
+
+        itemCompo.name = item.name;
+        itemCompo.ID = item.ID;
+        itemCompo.tool = item.tool;
+        itemCompo.sprite = item.sprite;
+        itemCompo.type = item.type;
+        itemCompo.effect = item.effect;
+
+        return obj;
+    }
 }
