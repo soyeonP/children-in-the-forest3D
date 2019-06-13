@@ -15,6 +15,7 @@ public class vision_of_monster : MonoBehaviour
 
     public GameObject poisened_meat;   //독고기
     public bool thereismeat = false;
+    bool Is_monster_weaken = false;
 
     public Vector3 targetPosition; //쫓을 대상(밑에targetsetting함수로 정함)
 
@@ -24,13 +25,13 @@ public class vision_of_monster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        anime = GetComponent<Animator>();
+        anime = gameObject.GetComponentInParent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+
 
     }
 
@@ -54,24 +55,51 @@ public class vision_of_monster : MonoBehaviour
     {
         if (coll.tag == "pmeat")
         {
-            targetsetting(poisened_meat);
+            Targetsetting(poisened_meat);
             GameObject.FindGameObjectWithTag("monster").transform.LookAt(targetPosition);
-            GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.08f);
+            GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.05f);
             anime.SetBool("mon_run", true);
+
+            if (Vector3.Distance(monster.transform.position, poisened_meat.transform.position) < 2.5)
+            {
+                anime.SetBool("mon_run", false);
+                anime.SetBool("mon_weaken", true);
+                Is_monster_weaken = true;
+            }
+            else
+                anime.SetBool("mon_weaken", false);
+
         }
 
 
         else if (coll.tag == "Player")
         {
-            if(count_player_entered == 1)
+            if (count_player_entered == 1)
             {
                 if (!thereismeat)
                 {
-                    targetsetting(coll.gameObject);
+                    Targetsetting(coll.gameObject);
                     monster.transform.LookAt(targetPosition);
-                    monster.transform.Translate(Vector3.forward * 0.08f);
-                    anime.SetBool("mon_walk", true);
+                    monster.transform.Translate(Vector3.forward * 0.05f);
+
+
+                    if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
+                    {
+                        anime.SetBool("mon_walk", false);
+                        anime.SetBool("mon_attack", true);
+                    }
+                    else
+                    {
+                        anime.SetBool("mon_attack", false);
+                        anime.SetBool("mon_walk", true);
+                    }
                 }
+                /*if (Is_monster_weaken)
+                {
+                    if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
+                    {
+                        Die();
+                    }*/
             }
 
             else
@@ -94,39 +122,56 @@ public class vision_of_monster : MonoBehaviour
                             player_monster_chased = Player[i];//최소거리를 갖는 플레이어를 지칭해주기
                         }
                     }
-                    targetsetting(player_monster_chased);
+                    Targetsetting(player_monster_chased);
                     monster.transform.LookAt(targetPosition);//지칭된 플레이어를 쫓아가기
-                    monster.transform.Translate(Vector3.forward * 0.08f);
+                    monster.transform.Translate(Vector3.forward * 0.05f);
                     anime.SetBool("mon_walk", true);
+
+                    if (Vector3.Distance(monster.transform.position, player_monster_chased.transform.position) < 3)
+                    {
+                        anime.SetBool("mon_walk", false);
+                        anime.SetBool("mon_attack", true);
+                    }
+                    else
+                    {
+                        anime.SetBool("mon_attack", false);
+                        anime.SetBool("mon_walk", true);
+                    }
                 }
-
-
             }
         }
     }
+    
 
     private void OnTriggerExit(Collider coll2)
     {
-        if (coll2.tag == "Player")
-        {
-            count_player_entered--;
-            if(count_player_entered == 0)
+            if (coll2.tag == "Player")
             {
-                anime.SetBool("mon_walk", false);
+                count_player_entered--;
+                if (count_player_entered == 0)
+                {
+                    anime.SetBool("mon_walk", false);
+                }
+
             }
 
-        }
-
-        if (coll2.tag == "pmeat")
-        {
-            thereismeat = false;
-            anime.SetBool("mon_run", false);
-        }
+            if (coll2.tag == "pmeat")
+            {
+                thereismeat = false;
+                anime.SetBool("mon_run", false);
+            }
     }
 
-    private void targetsetting(GameObject target)
+    void Targetsetting(GameObject target)
     {
         targetPosition = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z);
     }
 
+        /*void Die()
+        {
+            monster.transform.Translate(Vector3.down * 0.05f);
+        }*/
+
 }
+
+

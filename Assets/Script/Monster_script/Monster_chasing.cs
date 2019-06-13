@@ -5,7 +5,7 @@ using UnityEngine;
 public class Monster_chasing : MonoBehaviour
 {
     public Transform[] waypoints;//몬스터의 경로 지점들
-    public float moveSpeed = 2f;//몬스터가 웨이포인트 있는곳들 따라돌때 속도
+    Vector3 Waypoint_target;//경로 지점 향하는 벡터
     int waypointIndex = 0;
 
     //public Animator empty_stomach;//공복상태일떄의 애니메이션
@@ -25,11 +25,12 @@ public class Monster_chasing : MonoBehaviour
 
     void Update()
     {
-        if (!(gameObject.GetComponentInChildren<vision_of_monster>().thereismeat))
+        if ((!(gameObject.GetComponentInChildren<vision_of_monster>().thereismeat))&&(gameObject.GetComponentInChildren<vision_of_monster>().count_player_entered == 0))
             Move();
 
-        if (gameObject.GetComponentInChildren<vision_of_monster>().thereismeat)
-            anime.SetBool("mon_walk", false);
+        if ((gameObject.GetComponentInChildren<vision_of_monster>().thereismeat)||(gameObject.GetComponentInChildren<vision_of_monster>().count_player_entered !=0))
+            anime.SetBool("mon_walk", false); //독고기가있거나 플레이어가 시야에 들어오면 walk에니매이션 중지
+
         
 
         /*
@@ -45,8 +46,10 @@ public class Monster_chasing : MonoBehaviour
         anime.SetBool("mon_walk", true);
         if (waypointIndex < waypoints.Length)
         {
-            transform.position = Vector3.MoveTowards(transform.position
-            , waypoints[waypointIndex].transform.position, moveSpeed * Time.deltaTime);
+            targetting(waypoints[waypointIndex]);
+            gameObject.transform.LookAt(Waypoint_target);
+            gameObject.transform.Translate(Vector3.forward * 0.1f);
+          
 
 
             if (((int)transform.position.x == (int)waypoints[waypointIndex].transform.position.x)
@@ -57,14 +60,19 @@ public class Monster_chasing : MonoBehaviour
         {
             waypointIndex = 0;
         }
-        //anime.SetBool("mon_walk", false);
+        
     }
 
-    
-
-   /* void monster_is_hungry()//10초마다 몬스터 허기 1씩 깍기게 start에서 invoke함수로 실행
+    private void targetting(Transform target)
     {
-        hunger -= 100;
-    }*/
+        Waypoint_target = new Vector3(target.position.x, this.transform.position.y, target.position.z);
+    }
+
+
+
+    /* void monster_is_hungry()//10초마다 몬스터 허기 1씩 깍기게 start에서 invoke함수로 실행
+     {
+         hunger -= 100;
+     }*/
 
 }
