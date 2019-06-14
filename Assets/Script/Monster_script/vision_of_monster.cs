@@ -15,24 +15,28 @@ public class vision_of_monster : MonoBehaviour
 
     public GameObject poisened_meat;   //독고기
     public bool thereismeat = false;
+    bool Is_monster_hungry;
     bool Is_monster_weaken = false;
 
     public Vector3 targetPosition; //쫓을 대상(밑에targetsetting함수로 정함)
 
     Animator anime;
 
+    public float temp;
+
 
     // Start is called before the first frame update
     void Start()
     {
         anime = gameObject.GetComponentInParent<Animator>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
+        temp = Vector3.Distance(monster.transform.position, poisened_meat.transform.position);
+        Is_monster_hungry = gameObject.GetComponentInParent<Monster_chasing>().mon_empty_stomach;
     }
 
     public int count_player_entered = 0;
@@ -46,101 +50,109 @@ public class vision_of_monster : MonoBehaviour
 
         if (coll3.tag == "pmeat")
         {
-            thereismeat = true;
+            if (Is_monster_hungry)
+            {
+                thereismeat = true;
+            }
         }
     }
 
 
     private void OnTriggerStay(Collider coll)
     {
-        if (coll.tag == "pmeat")
-        {
-            Targetsetting(poisened_meat);
-            GameObject.FindGameObjectWithTag("monster").transform.LookAt(targetPosition);
-            GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.05f);
-            anime.SetBool("mon_run", true);
+        bool a = true;//독고기 사라져도 thereismeat 다시 true되는 경우 방지 false면 독고기 파괴됐다는거
 
-            if (Vector3.Distance(monster.transform.position, poisened_meat.transform.position) < 2.5)
+        
+        if (coll.tag == "pmeat") //시야에들어온 물체가 독고기일때
+        {
+            if (Is_monster_hungry&&a) // 공복상태여야함
             {
-                anime.SetBool("mon_run", false);
-                anime.SetBool("mon_weaken", true);
-                Is_monster_weaken = true;
+                thereismeat = true; //이미 시야에 독고기 들어오고 난다음 공복상태로 바뀐경우위해 여기에도 추가
+
+                Targetsetting(poisened_meat);
+                GameObject.FindGameObjectWithTag("monster").transform.LookAt(targetPosition);
+                GameObject.FindGameObjectWithTag("monster").transform.Translate(Vector3.forward * 0.05f);
+                anime.SetBool("mon_run", true);
+
+                if (Vector3.Distance(monster.transform.position, poisened_meat.transform.position) < 3)
+                {
+                    a = false;
+                    Destroy(poisened_meat, 2.3f);//독고기 먹어서 없어진걸 나타냄
+                    thereismeat = false;
+                    StartCoroutine("Mon_weaken");//독고기 먹고 깜박거리면서 약화상태
+                    Is_monster_weaken = true;
+                    anime.SetBool("mon_run", false);
+                }
             }
-            else
-                anime.SetBool("mon_weaken", false);
 
         }
 
 
-        else if (coll.tag == "Player")
+        if ((coll.tag == "Player")&&!(thereismeat)) //시야에 들어온 물체가 플레이어일때 
         {
-            if (count_player_entered == 1)
+            if (count_player_entered == 1) //한명일 때
             {
-                if (!thereismeat)
-                {
-                    Targetsetting(coll.gameObject);
-                    monster.transform.LookAt(targetPosition);
-                    monster.transform.Translate(Vector3.forward * 0.05f);
+                Targetsetting(coll.gameObject);
+                monster.transform.LookAt(targetPosition);
+                monster.transform.Translate(Vector3.forward * 0.05f);
 
 
-                    if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
-                    {
-                        anime.SetBool("mon_walk", false);
-                        anime.SetBool("mon_attack", true);
-                    }
-                    else
-                    {
-                        anime.SetBool("mon_attack", false);
-                        anime.SetBool("mon_walk", true);
-                    }
+                if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
+                {//거리가 가까워지면 어텍 애니메이션
+                     //anime.SetBool("mon_walk", false);
+                    anime.SetBool("mon_attack", true);
                 }
+                else
+                {
+                    anime.SetBool("mon_attack", false);
+                    //anime.SetBool("mon_walk", true);
+                }
+            }
                 /*if (Is_monster_weaken)
                 {
                     if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
                     {
                         Die();
                     }*/
-            }
+        
 
-            else
+            else //한명 이상일때
             {
-                if (!thereismeat)
+                for (int i = 0; i < 3; i++)//몬스터와 플레이어사이 거리를 계산하는루프
                 {
-                    for (int i = 0; i < 3; i++)//몬스터와 플레이어사이 거리를 계산하는루프
-                    {
-                        distance[i] = monster.transform.position - Player[i].transform.position;
-                        sqrdistance[i] = distance[i].sqrMagnitude;
-                    }
+                    distance[i] = monster.transform.position - Player[i].transform.position;
+                    sqrdistance[i] = distance[i].sqrMagnitude;
+                }
 
-                    Min = sqrdistance[0];
+                Min = sqrdistance[0];
 
-                    for (int i = 0; i < 3; i++)//최소 거리를 Min에 집어넣기
+                for (int i = 0; i < 3; i++)//최소 거리를 Min에 집어넣기
+                {
+                    if (sqrdistance[i] <= Min)
                     {
-                        if (sqrdistance[i] <= Min)
-                        {
-                            Min = sqrdistance[i];
-                            player_monster_chased = Player[i];//최소거리를 갖는 플레이어를 지칭해주기
-                        }
+                        Min = sqrdistance[i];
+                        player_monster_chased = Player[i];//최소거리를 갖는 플레이어를 지칭해주기
                     }
-                    Targetsetting(player_monster_chased);
-                    monster.transform.LookAt(targetPosition);//지칭된 플레이어를 쫓아가기
-                    monster.transform.Translate(Vector3.forward * 0.05f);
+                }
+                Targetsetting(player_monster_chased);
+                monster.transform.LookAt(targetPosition);//지칭된 플레이어를 쫓아가기
+                monster.transform.Translate(Vector3.forward * 0.05f);
+                anime.SetBool("mon_walk", true);
+
+                if (Vector3.Distance(monster.transform.position, player_monster_chased.transform.position) < 3)
+                {
+                    anime.SetBool("mon_walk", false);
+                    anime.SetBool("mon_attack", true);
+                }
+                else
+                {
+                    anime.SetBool("mon_attack", false);
                     anime.SetBool("mon_walk", true);
-
-                    if (Vector3.Distance(monster.transform.position, player_monster_chased.transform.position) < 3)
-                    {
-                        anime.SetBool("mon_walk", false);
-                        anime.SetBool("mon_attack", true);
-                    }
-                    else
-                    {
-                        anime.SetBool("mon_attack", false);
-                        anime.SetBool("mon_walk", true);
-                    }
                 }
             }
         }
     }
+    
     
 
     private void OnTriggerExit(Collider coll2)
@@ -167,10 +179,32 @@ public class vision_of_monster : MonoBehaviour
         targetPosition = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z);
     }
 
-        /*void Die()
+
+
+    IEnumerator Mon_weaken()//몬스터 약화상태일때 깜박깜박거리기
+    {
+        int counttime = 0;
+
+        yield return new WaitForSeconds(3f);
+
+        while (counttime < 10)
         {
-            monster.transform.Translate(Vector3.down * 0.05f);
-        }*/
+            if (counttime % 2 == 0)
+                monster.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+            else
+                monster.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+
+            yield return new WaitForSeconds(0.2f);
+
+            counttime++;
+        }
+        monster.GetComponent<Renderer>().enabled = true;
+
+        yield return null;
+
+    }
+
+    
 
 }
 
