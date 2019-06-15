@@ -48,6 +48,7 @@ public class MovePointForCam : MonoBehaviour
 
     private void Start()
     {
+
         tr = GetComponent<Transform>();
         target = targetA;
 
@@ -144,7 +145,7 @@ public class MovePointForCam : MonoBehaviour
 
     void getPosition()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.currentSelectedGameObject)
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.currentSelectedGameObject )
         {
             Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit Hit;

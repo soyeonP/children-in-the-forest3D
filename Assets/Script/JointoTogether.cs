@@ -6,18 +6,24 @@ public class JointoTogether : MonoBehaviour
 {
     public Vector3 position;
     public bool join = false;
-
+    private SaveLoad saveNLoad;
 
     // Start is called before the first frame update
     void Start()
     {
+        saveNLoad = FindObjectOfType<SaveLoad>();
+
+      
+               saveNLoad.CallLoad();//save data
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(join == true)
+
+        if (join == true)
         {
             
         }

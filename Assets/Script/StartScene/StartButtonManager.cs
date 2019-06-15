@@ -11,6 +11,7 @@ public class StartButtonManager : MonoBehaviour
 
     private void Start()
     {
+
         if (File.Exists(Application.dataPath + "/SaveFile.dat")) isSaved = true;
         else
         {
@@ -28,7 +29,6 @@ public class StartButtonManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         SceneManager.LoadScene("Main");
 
-        // 게임 데이터 로딩
 
         Destroy(gameObject);
     }

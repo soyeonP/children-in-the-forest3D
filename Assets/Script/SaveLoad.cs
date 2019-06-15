@@ -128,18 +128,21 @@ public class SaveLoad : MonoBehaviour
            
             vector.Set(data.AplayerX, data.AplayerY, data.AplayerZ);
             CharA.transform.position = vector;
+            CharA.position = vector;
             AplayerState.hp = data.A_HP;
             AplayerState.full = data.A_Full;
             AplayerState.scare = data.A_scare;
 
             vector.Set(data.BplayerX, data.BplayerY, data.BplayerZ);
             CharB.transform.position = vector;
+            CharB.position = vector;
             BplayerState.hp = data.B_HP;
             BplayerState.full = data.B_Full;
             BplayerState.scare = data.B_scare;
 
             vector.Set(data.CplayerX, data.CplayerY, data.CplayerZ);
             CharC.transform.position = vector;
+            CharC.position = vector;
             CplayerState.hp = data.C_HP;
             CplayerState.full = data.C_Full;
             CplayerState.scare = data.C_scare;
