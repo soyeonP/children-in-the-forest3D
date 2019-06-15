@@ -23,7 +23,7 @@ public class MovePointForCam : MonoBehaviour
 
     //camera limit 
     public const float offsetX = 0f;
-    public const float offsetY = 20f;
+    public const float offsetY = 10f;
     public const float offsetZ = 0f;
     public float limitright = 50f;
     //public float limitleft = -10f;
@@ -154,30 +154,33 @@ public class MovePointForCam : MonoBehaviour
             {
                 Debug.Log(Hit.point);
 
-                switch (MoveChar)
+                if (Hit.collider.name == "Plane")
                 {
-                    case 0:
+                    switch (MoveChar)
+                    {
+                        case 0:
 
-                        break;
-                    case 1:    //playerA
-                        target = targetA;
-                        CharA.position = Hit.point;
-                        break;
-                    case 2:    //playerB
-                        target = targetB;
-                        CharB.position = Hit.point;
-                        break;
-                    case 3:   //playerC
-                              //   Input.GetMouseDown(0); // 마우스 클릭위치로 이동 //일단 집합하고 못움직여야지. 
-                        target = targetC;
-                        CharC.position = Hit.point;
-                        break;
-                    case 4:
-                       // target = targetAll;
-                        CharAll_Join.transform.position = Hit.point;
-                        setPosition(CharAll_Join.transform.position);
+                            break;
+                        case 1:    //playerA
+                            target = targetA;
+                            CharA.position = Hit.point;
+                            break;
+                        case 2:    //playerB
+                            target = targetB;
+                            CharB.position = Hit.point;
+                            break;
+                        case 3:   //playerC
+                                  //   Input.GetMouseDown(0); // 마우스 클릭위치로 이동 //일단 집합하고 못움직여야지. 
+                            target = targetC;
+                            CharC.position = Hit.point;
+                            break;
+                        case 4:
+                            // target = targetAll;
+                            CharAll_Join.transform.position = Hit.point;
+                            setPosition(CharAll_Join.transform.position);
 
-                        break;
+                            break;
+                    }
                 }
             }
         }
