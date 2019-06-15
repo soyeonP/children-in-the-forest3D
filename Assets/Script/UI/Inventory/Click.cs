@@ -33,7 +33,10 @@ public class Click : MonoBehaviour {
                 {
                     clickedObj = hit.collider.gameObject;
                     GetBtn.SetActive(true); // 클릭 시 채집 버튼 뜨도록
-                    GetBtn.transform.position = new Vector2(mousePosition.x + 20, mousePosition.y + 20);
+
+                    Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+
+                    GetBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
                     //GetBtn.transform.position = new Vector2(clickedObj.transform.position.x + 1, clickedObj.transform.position.y + 1);
                 }
                 else if (hit.collider.gameObject.tag == "Huntable")
@@ -44,9 +47,11 @@ public class Click : MonoBehaviour {
                     // 아직 새총 추가 안돼서 조건 안 걸어둠
                         clickedObj = hit.collider.gameObject;
 
-                        // 상호작용 버튼 출력
-                        huntBtn.SetActive(true);
-                        huntBtn.transform.position = new Vector2(mousePosition.x + 20, mousePosition.y + 20);
+                    Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+
+                    // 상호작용 버튼 출력
+                    huntBtn.SetActive(true);
+                    huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
                     //}
                 }
                 else
@@ -55,6 +60,21 @@ public class Click : MonoBehaviour {
                     huntBtn.SetActive(false);
                     clickedObj = null;
                 }
+            }
+        }
+
+        if (clickedObj != null)
+        {
+            if (GetBtn.activeInHierarchy)
+            {
+                Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+                GetBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
+            }
+            if (huntBtn.activeInHierarchy)
+            {
+
+                Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+                huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
             }
         }
 	}

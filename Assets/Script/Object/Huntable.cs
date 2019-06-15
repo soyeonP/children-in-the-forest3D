@@ -31,9 +31,6 @@ public class Huntable : MonoBehaviour
 
         killedObj.transform.position = gameObject.transform.position;
 
-        Material[] materials = new Material[1];
-        materials[0] = dm.GetMaterial(killed);
-        killedObj.GetComponent<MeshRenderer>().materials = materials;
         killedObj.name = killedItemData.ID;
 
         Destroy(gameObject);

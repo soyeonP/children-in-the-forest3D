@@ -9,7 +9,7 @@ public class DataManager : MonoBehaviour {
     private List<Dictionary<string, object>> itemList;
     public List<Item> items;
     public Sprite[] sprites;
-    public Material[] materials;
+    public GameObject[] materials;
     public Sprite defaultImg;
 
     /* 조합 레시피 리스트 */
@@ -140,9 +140,9 @@ public class DataManager : MonoBehaviour {
         return defaultImg;
     }
 
-    public Material GetMaterial(string id)
+    public GameObject GetObj(string id)
     {
-        foreach (Material mat in materials)
+        foreach (GameObject mat in materials)
         {
             if (mat.name == id)
             {

@@ -12,6 +12,7 @@ TagManager:
   - Object
   - Huntable
   - ground
+  - terrain
   layers:
   - Default
   - TransparentFX

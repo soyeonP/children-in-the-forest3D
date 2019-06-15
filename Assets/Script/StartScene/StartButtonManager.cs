@@ -22,7 +22,7 @@ public class StartButtonManager : MonoBehaviour
     public void OnClickNewStart()
     {
         File.Delete(Application.dataPath + "/SaveFile.dat");
-        File.Delete(Application.dataPath + "/save/InventoryData.xml");
+        File.Delete(Application.dataPath + "/Save/InventoryData.xml");
         SceneManager.LoadScene("Main");
 
     }
