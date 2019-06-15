@@ -97,12 +97,23 @@ public class playerState : MonoBehaviour
 
     void Update()
     {
-    
-    
+
+        if (full > 0)
+            full -= (0.1f * Time.deltaTime);
+        else
+            dead();
         //몬스터가 공격시 hp 감소
         if (hp > 0)
-            hp -= (0.1f * Time.deltaTime);
-           //플레이어 사망 클래스만들고/ 클래스 소환. 
+            ;
+        else
+            dead();
+
+        if (scare > 0)
+            ;
+        else
+            dead();
+
+        //플레이어 사망 클래스만들고/ 클래스 소환. 
         //음식아이템 섭취시 stamina 증가
 
         if (ui != null) ui.transform.position = Camera.main.WorldToScreenPoint(gameObject.transform.position);
@@ -171,5 +182,10 @@ public class playerState : MonoBehaviour
     {
 
         return scare;
+    }
+
+    private void dead()
+    {
+        gameObject.SetActive(false);
     }
 }
