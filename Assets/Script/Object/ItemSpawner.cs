@@ -25,35 +25,30 @@ public class ItemSpawner : MonoBehaviour {
             GameObject obj = SpawnObj(item);
 
             /* 오브젝트 생성 - 테스트용으로 화면 안에서만 */
-            if (obj != null)
-            {
-                float yy = obj.GetComponent<BoxCollider>().size.y;
-                obj.transform.position = FindSpawnPosition(yy);
+            float yy = obj.GetComponent<BoxCollider>().size.y;
+            obj.transform.position = FindSpawnPosition(yy);
 
-                obj.name = item.ID;
-            }
+            obj.name = item.ID;
         }
     }
 
     public GameObject SpawnObj(Item item) 
     {
-        GameObject objPrefab = dm.GetObj(item.ID);
-        if (objPrefab != null) {
-            GameObject obj = Instantiate(objPrefab, objParent.transform);
-            obj.AddComponent<Item>();
-            obj.AddComponent<BoxCollider>();
-            obj.tag = "Object";
-            Item itemCompo = obj.GetComponent<Item>();
+        Debug.Log(item.ID);
+        GameObject obj = Instantiate(dm.GetObj(item.ID), objParent.transform);
+        obj.AddComponent<Item>();
+        obj.AddComponent<BoxCollider>();
+        obj.tag = "Object";
+        Item itemCompo = obj.GetComponent<Item>();
 
-            itemCompo.name = item.name;
-            itemCompo.ID = item.ID;
-            itemCompo.tool = item.tool;
-            itemCompo.sprite = item.sprite;
-            itemCompo.type = item.type;
-            itemCompo.effect = item.effect;
+        itemCompo.name = item.name;
+        itemCompo.ID = item.ID;
+        itemCompo.tool = item.tool;
+        itemCompo.sprite = item.sprite;
+        itemCompo.type = item.type;
+        itemCompo.effect = item.effect;
 
-            return obj;
-        } else return null;
+        return obj;
     }
 
     private Vector3 FindSpawnPosition(float yy)

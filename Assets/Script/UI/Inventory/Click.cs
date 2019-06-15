@@ -11,7 +11,6 @@ public class Click : MonoBehaviour {
     public GameObject clickedObj;
 
     public GameObject bullet;
-    public Image HuntingUI;
 
     private MovePointForCam move;
 
@@ -44,7 +43,7 @@ public class Click : MonoBehaviour {
                 {
                     // TODO 새총 보유중인지 확인
                     int nowChar = move.getMoveChar();
-                    if (ObjManager.objManager.inventory.getItemCount("sling", nowChar - 1) > 0) {
+                    //if (ObjManager.objManager.inventory.getItemCount("slinger", nowChar) > 0) {
                     // 아직 새총 추가 안돼서 조건 안 걸어둠
                         clickedObj = hit.collider.gameObject;
 
@@ -53,7 +52,7 @@ public class Click : MonoBehaviour {
                     // 상호작용 버튼 출력
                     huntBtn.SetActive(true);
                     huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
-                    }
+                    //}
                 }
                 else
                 {
@@ -99,34 +98,9 @@ public class Click : MonoBehaviour {
         //GameObject bul = Instantiate(bullet);
         //bul.GetComponent<Rigidbody>().AddForce
 
-        int character = move.getMoveChar();
-        HuntingUI.gameObject.SetActive(true);
-        IEnumerator coroutine = FillImage(HuntingUI, character);
-        StartCoroutine(coroutine);
-
-    }
-
-    IEnumerator FillImage(Image image, int selChar)
-    {
-        selChar--;
-        GameObject child = DataManager.dataManager.GetChildren()[selChar];
-        image.fillAmount = 0;
-
-        while (image.fillAmount < 1)
-        {
-            Debug.Log("a");
-            image.gameObject.transform.position = Camera.main.WorldToScreenPoint(child.transform.position) + new Vector3(0, 40, 0);
-            image.fillAmount += 0.05f;
-            yield return null;
-        }
-
-        image.fillAmount = 0;
-        image.gameObject.SetActive(false);
 
         // 일단 걍 토끼가 죽게 하자
-        clickedObj.GetComponent<Animator>().SetTrigger("dead");
         clickedObj.GetComponent<Huntable>().Kill();
-
         // 사냥 버튼 끄기
         huntBtn.SetActive(false);
     }
