@@ -25,9 +25,9 @@ public class MovePointForCam : MonoBehaviour
     public const float offsetX = 0f;
     public const float offsetY = 10f;
     public const float offsetZ = 0f;
-    public float limitright = 50f;
+    public float limitright = 100f;
     //public float limitleft = -10f;
-    public float limittop = 50f;
+    public float limittop = 100f;
     //public float limitbottom = -10f;
 
     public float followSpeed = 10.0f;
