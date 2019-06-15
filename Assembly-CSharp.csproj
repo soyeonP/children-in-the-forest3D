@@ -60,10 +60,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AceAsset\Werewolf\ExampleScripts\CharControl.cs" />
+    <Compile Include="Assets\AceAsset\Werewolf\ExampleScripts\DestroyTime.cs" />
+    <Compile Include="Assets\AceAsset\Werewolf\ExampleScripts\FollowCam.cs" />
+    <Compile Include="Assets\AceAsset\Werewolf\ExampleScripts\SceneAnimation.cs" />
     <Compile Include="Assets\Script\Data\CSVReader.cs" />
     <Compile Include="Assets\Script\Data\DataManager.cs" />
     <Compile Include="Assets\Script\DatabaseManager.cs" />
     <Compile Include="Assets\Script\JointoTogether.cs" />
+    <Compile Include="Assets\Script\Monster_script\attack_range.cs" />
     <Compile Include="Assets\Script\Monster_script\Monster_chasing.cs" />
     <Compile Include="Assets\Script\Monster_script\vision_of_monster.cs" />
     <Compile Include="Assets\Script\MoveCharacter.cs" />

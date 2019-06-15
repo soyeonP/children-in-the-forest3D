@@ -12,6 +12,8 @@ TagManager:
   - Object
   - monster
   - pmeat
+  - explosion
+  - attack
   layers:
   - Default
   - TransparentFX

@@ -23,6 +23,7 @@ public class Monster_chasing : MonoBehaviour
     {
         anime = GetComponent<Animator>();
         InvokeRepeating("monster_is_hungry", 1f, 5f);//몬스터 hp깎이게하는 함수 반복호출
+        
     }
 
 
@@ -48,7 +49,7 @@ public class Monster_chasing : MonoBehaviour
 
         if(mon_HP == 0)
         {
-            gameObject.GetComponent<CapsuleCollider>().isTrigger = true;
+            anime.SetTrigger("mon_die");
             Destroy(gameObject, 3f);
         }
         

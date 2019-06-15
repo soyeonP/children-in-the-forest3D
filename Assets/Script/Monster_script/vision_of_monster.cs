@@ -23,6 +23,9 @@ public class vision_of_monster : MonoBehaviour
     Animator anime;
 
     public float temp;
+    public GameObject attack_range;
+    Transform player_position;
+    bool b = true;//
 
 
     // Start is called before the first frame update
@@ -77,6 +80,9 @@ public class vision_of_monster : MonoBehaviour
                 if (Vector3.Distance(monster.transform.position, poisened_meat.transform.position) < 3)
                 {
                     a = false;
+                   /* attack_range.transform.LookAt(poisened_meat.transform);
+                    anime.SetTrigger("mon_attack");*/
+
                     Destroy(poisened_meat, 2.3f);//독고기 먹어서 없어진걸 나타냄
                     thereismeat = false;
                     StartCoroutine("Mon_weaken");//독고기 먹고 깜박거리면서 약화상태
@@ -97,16 +103,34 @@ public class vision_of_monster : MonoBehaviour
                 monster.transform.Translate(Vector3.forward * 0.05f);
 
 
-                if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 3)
-                {//거리가 가까워지면 어텍 애니메이션
-                     //anime.SetBool("mon_walk", false);
-                    anime.SetBool("mon_attack", true);
+                if (Vector3.Distance(monster.transform.position, coll.gameObject.transform.position) < 5)
+
+                {//거리가 가까워지면 공격발동
+                    
+                    anime.SetBool("mon_walk", false);
+                    if (b)
+                    {
+                        attack_range.transform.position = new Vector3(coll.gameObject.transform.position.x, attack_range.transform.position.y, coll.gameObject.transform.position.z);
+                    }
+                    b = false;//위에 이프조건문 한번만 실행하게 하려고
+                    attack_range.GetComponent<SkinnedMeshRenderer>().enabled = true;
+                    attack_range.GetComponent<CapsuleCollider>().enabled = true;
+
+                    player_position.position = new Vector3(coll.gameObject.transform.position.x, attack_range.transform.position.y, coll.gameObject.transform.position.z);
+
+                    attack_range.transform.LookAt(player_position);
+                    attack_range.transform.Translate(Vector3.forward * 0.08f);
+                    
+                    
                 }
                 else
                 {
-                    anime.SetBool("mon_attack", false);
-                    //anime.SetBool("mon_walk", true);
+                    attack_range.GetComponent<SkinnedMeshRenderer>().enabled = false;
+                    attack_range.GetComponent<CapsuleCollider>().enabled = false;
+                    b = true;
+                   
                 }
+
             }
                 /*if (Is_monster_weaken)
                 {
