@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class JointoTogether : MonoBehaviour
 {
@@ -11,10 +12,11 @@ public class JointoTogether : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        saveNLoad = FindObjectOfType<SaveLoad>();
-
-      
-               saveNLoad.CallLoad();//save data
+        if (File.Exists(Application.dataPath + "/SaveFile.dat"))
+        {
+            saveNLoad = FindObjectOfType<SaveLoad>();
+            saveNLoad.CallLoad();//save data
+        }
         
         
     }

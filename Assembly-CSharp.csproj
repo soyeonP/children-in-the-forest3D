@@ -85,7 +85,6 @@
     <Compile Include="Assets\Script\UI\Inventory\ItemIO.cs" />
     <Compile Include="Assets\Script\UI\Inventory\ObjManager.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
-    <None Include="Assets\Save\InventoryData.xml" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Github/children-in-the-forest3D/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

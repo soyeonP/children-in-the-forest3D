@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class playerState : MonoBehaviour
 {
     public float hp = 100;              // 체력
-    public float full = 10;             // 포만감
+    public float full = 100;             // 포만감
     public float scare = 10;            // 공포
     public int insight;                 // 통찰력
     public int charNum;
@@ -14,6 +14,9 @@ public class playerState : MonoBehaviour
     public Slider hpBar;
     public Slider fullBar;
     public Slider scareBar;
+
+    public GameObject dead_char;
+    public GameObject dead_state;
 
     private bool isSelected = false;    // 현재 선택되었는가 여부
 
@@ -186,6 +189,16 @@ public class playerState : MonoBehaviour
 
     private void dead()
     {
+        hp = 0;
+        full = 0;
+        scare = 0;
         gameObject.SetActive(false);
+        setAct();
+    }
+
+    public void setAct()
+    {
+        dead_char.SetActive(true);
+        dead_state.SetActive(true);
     }
 }
