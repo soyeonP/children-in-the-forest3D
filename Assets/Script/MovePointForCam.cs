@@ -23,7 +23,7 @@ public class MovePointForCam : MonoBehaviour
 
     //camera limit 
     public const float offsetX = 0f;
-    public const float offsetY = 10f;
+    public const float offsetY = 15f;
     public const float offsetZ = 0f;
     public float limitright = 100f;
     //public float limitleft = -10f;
@@ -52,7 +52,10 @@ public class MovePointForCam : MonoBehaviour
         tr = GetComponent<Transform>();
         target = targetA;
 
-        CharA = GameObject.Find("ACharacter").GetComponent<MoveCharacter>();
+        transform.localEulerAngles = new Vector3(65, 0, 0);
+
+
+          CharA = GameObject.Find("ACharacter").GetComponent<MoveCharacter>();
         CharB = GameObject.Find("BCharacter").GetComponent<MoveCharacter>();
         CharC = GameObject.Find("CCharacter").GetComponent<MoveCharacter>();
         CharAll_Join = GameObject.Find("Together").GetComponent<JointoTogether>();
@@ -61,7 +64,7 @@ public class MovePointForCam : MonoBehaviour
     void Update()
     {
         //follow Character 
-        cameraPosition = new Vector3(target.position.x + 2f, offsetY, target.position.z - 16f);
+        cameraPosition = new Vector3(target.position.x , offsetY, target.position.z-5 );
 
         if (target.position.x + 2f > limitright)
             cameraPosition.x = limitright;
