@@ -12,7 +12,8 @@ public class EndSceneManager : MonoBehaviour
     void Start()
     {
         File.Delete(Application.dataPath + "/SaveFile.dat");
-        File.Delete(Application.dataPath + "/save/InventoryData.xml");
+        if (File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
+            File.Delete(Application.dataPath + "/save/InventoryData.xml");
         Debug.Log("delete file succeed");
     }
     public void OnClickReplay()
