@@ -35,6 +35,7 @@ public class MovePointForCam : MonoBehaviour
 
     private Transform tr;
     Vector3 cameraPosition;
+    Vector3 movePoint;
 
     GameObject top;
     GameObject left;
@@ -65,7 +66,7 @@ public class MovePointForCam : MonoBehaviour
     void Update()
     {
         //follow Character 
-        cameraPosition = new Vector3(target.position.x , offsetY, target.position.z-5 );
+        cameraPosition = new Vector3(target.position.x , offsetY, target.position.z - 7 );
 
         if (target.position.x + 2f > limitright)
             cameraPosition.x = limitright;
@@ -135,11 +136,6 @@ public class MovePointForCam : MonoBehaviour
             getPosition();
             
         }
-      /*  if (CharAll.canMove == true)
-        {
-            MoveChar = 0;
-            getPosition();        
-        }*/
         if(CharAll_Join.join == true)
         {
             MoveChar = 4;
@@ -160,9 +156,11 @@ public class MovePointForCam : MonoBehaviour
             {
                 Debug.Log(Hit.point);
 
-                if (Hit.collider.name == "Plane"
+                if (Hit.collider.name == "Plane" || Hit.collider.tag == "attack" || Hit.collider.tag =="Finish"
                     && Hit.collider.tag != "Object" && Hit.collider.tag != "Checkable" && Hit.collider.tag != "Huntable")
                 {
+                    movePoint = new Vector3(Hit.point.x, 0, Hit.point.z);
+                    Debug.Log(movePoint);
                     switch (MoveChar)
                     {
                         case 0:
@@ -170,16 +168,16 @@ public class MovePointForCam : MonoBehaviour
                             break;
                         case 1:    //playerA
                             target = targetA;
-                            CharA.position = Hit.point;
+                            CharA.position = movePoint;
                             break;
                         case 2:    //playerB
                             target = targetB;
-                            CharB.position = Hit.point;
+                            CharB.position = movePoint;
                             break;
                         case 3:   //playerC
                                   //   Input.GetMouseDown(0); // 마우스 클릭위치로 이동 //일단 집합하고 못움직여야지. 
                             target = targetC;
-                            CharC.position = Hit.point;
+                            CharC.position = movePoint;
                             break;
                         case 4:
                             // target = targetAll;
@@ -193,7 +191,9 @@ public class MovePointForCam : MonoBehaviour
         }
     }
 
-  void  setPosition( Vector3 joinPos) // join해야할때, 애들 위치 설정 
+
+    /* join해야할때, 애들 위치 설정 */
+    void setPosition( Vector3 joinPos)
     {
         
         top = GameObject.FindGameObjectWithTag("top");
@@ -269,17 +269,6 @@ public class MovePointForCam : MonoBehaviour
 
                 break;
         }
-        // 캐릭터 이동값은 transform.position의 위아래옆 으로 모인다.
-
-        //       CharA.position = top.transform.position;
-        //       CharB.position = left.transform.position;
-        //       CharC.position = right.transform.position;
-
-        //  join = false;
-        // 위 아래 옆 위치로 도착하면
-        //그 위치에 together의 자식화 
-        //그리고 together의 movecharacter의 canmove를 킨다. 
-
 
     }
 
