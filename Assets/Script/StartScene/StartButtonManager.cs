@@ -21,6 +21,10 @@ public class StartButtonManager : MonoBehaviour
     }
     public void OnClickNewStart()
     {
+        PlayerPrefs.SetInt("isGotsling", 1);
+        PlayerPrefs.SetInt("isGotmushroom_soup", 1);
+        PlayerPrefs.SetInt("isGotpoison_meat", 0);
+
         File.Delete(Application.dataPath + "/SaveFile.dat");
         if (File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
             File.Delete(Application.dataPath + "/Save/InventoryData.xml");

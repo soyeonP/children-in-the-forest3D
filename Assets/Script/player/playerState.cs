@@ -101,8 +101,8 @@ public class playerState : MonoBehaviour
     void Update()
     {
 
-        if (full > 0) ;
-        //full -= (0.1f * Time.deltaTime);
+        if (full > 0) 
+            full -= (0.1f * Time.deltaTime);
         else
             dead();
         //몬스터가 공격시 hp 감소

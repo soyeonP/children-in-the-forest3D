@@ -30,10 +30,6 @@ public class CombineUI : MonoBehaviour
     private void Start()
     {
         /* 임시 설정 */
-        PlayerPrefs.SetInt("isGotsling", 1);
-        PlayerPrefs.SetInt("isGotmushroom_soup", 1);
-        PlayerPrefs.SetInt("isGotpoison_meat", 0);
-
 
         dm = DataManager.dataManager;
         cb = GetComponent<Combine>();

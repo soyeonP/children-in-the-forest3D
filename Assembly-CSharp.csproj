@@ -60,23 +60,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Characters\Werewolf\ExampleScripts\CharControl.cs" />
+    <Compile Include="Assets\Characters\Werewolf\ExampleScripts\DestroyTime.cs" />
+    <Compile Include="Assets\Characters\Werewolf\ExampleScripts\FollowCam.cs" />
+    <Compile Include="Assets\Characters\Werewolf\ExampleScripts\SceneAnimation.cs" />
     <Compile Include="Assets\gameController.cs" />
     <Compile Include="Assets\Objects\Rabbits\Demo\Scripts\AnimatorParamatersChange.cs" />
-    <Compile Include="Assets\Script\CsvFileCommon.cs" />
-    <Compile Include="Assets\Script\CsvFileWriter.cs" />
+    <Compile Include="Assets\Script\Data\CsvFileCommon.cs" />
+    <Compile Include="Assets\Script\Data\CsvFileWriter.cs" />
     <Compile Include="Assets\Script\Data\CSVReader.cs" />
+    <Compile Include="Assets\Script\Data\DatabaseManager.cs" />
     <Compile Include="Assets\Script\Data\DataManager.cs" />
-    <Compile Include="Assets\Script\DatabaseManager.cs" />
-    <Compile Include="Assets\Script\EndManager.cs" />
-    <Compile Include="Assets\Script\EndSceneManager.cs" />
-    <Compile Include="Assets\Script\JointoTogether.cs" />
-    <Compile Include="Assets\Script\MoveCharacter.cs" />
-    <Compile Include="Assets\Script\MovePointForCam.cs" />
+    <Compile Include="Assets\Script\Data\EndManager.cs" />
+    <Compile Include="Assets\Script\Data\EndSceneManager.cs" />
+    <Compile Include="Assets\Script\Data\SaveLoad.cs" />
+    <Compile Include="Assets\Script\Monster\attack_range.cs" />
+    <Compile Include="Assets\Script\Monster\Monster_chasing.cs" />
+    <Compile Include="Assets\Script\Monster\vision_of_monster.cs" />
     <Compile Include="Assets\Script\Object\Huntable.cs" />
     <Compile Include="Assets\Script\Object\ItemSpawner.cs" />
-    <Compile Include="Assets\Script\playerState.cs" />
-    <Compile Include="Assets\Script\SaveLoad.cs" />
-    <Compile Include="Assets\Script\SelectPlayer.cs" />
+    <Compile Include="Assets\Script\player\JointoTogether.cs" />
+    <Compile Include="Assets\Script\player\MoveCharacter.cs" />
+    <Compile Include="Assets\Script\player\MovePointForCam.cs" />
+    <Compile Include="Assets\Script\player\playerState.cs" />
+    <Compile Include="Assets\Script\player\SelectPlayer.cs" />
     <Compile Include="Assets\Script\StartScene\StartButtonManager.cs" />
     <Compile Include="Assets\Script\UI\Combine\Combine.cs" />
     <Compile Include="Assets\Script\UI\Combine\CombineUI.cs" />
