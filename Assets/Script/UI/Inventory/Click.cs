@@ -169,4 +169,5 @@ public class Click : MonoBehaviour {
         huntBtn.SetActive(false);
     }
 
+
 }

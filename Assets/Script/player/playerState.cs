@@ -18,6 +18,14 @@ public class playerState : MonoBehaviour
     public GameObject dead_char;
     public GameObject dead_state;
 
+    private AudioSource audio;
+
+    public AudioClip eatSound;
+    public AudioClip cryingSound;
+    public AudioClip makingSound;
+    public AudioClip trapSound;
+    public AudioClip CookSound;
+
     private bool isSelected = false;    // 현재 선택되었는가 여부
 
     /* 조합 부분 */
@@ -65,7 +73,6 @@ public class playerState : MonoBehaviour
     private void CompleteCombine()
     {
         txtLeftTime.text = "제작완료!";
-
         txtLeftTime.transform.parent.GetComponent<Button>().onClick.RemoveAllListeners();
         txtLeftTime.transform.parent.GetComponent<Button>().onClick.AddListener(GetCombItem);
     }
@@ -86,6 +93,8 @@ public class playerState : MonoBehaviour
             SetWorking();
             Destroy(ui);
             ui = null;
+            audio.Stop();
+            audio.loop = false;
             Debug.Log("획득 완료");
         }
         else
@@ -96,7 +105,11 @@ public class playerState : MonoBehaviour
     }
 
     /* 조합 부분 끝 */
- 
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -124,6 +137,9 @@ public class playerState : MonoBehaviour
         // 조합 중일 시 시간 ui 설정
         if (isWorking)
         {
+            audio.clip = makingSound;
+            audio.loop = true;
+            audio.Play();
             dt += Time.deltaTime;
 
             if (dt >= 1)
@@ -133,6 +149,8 @@ public class playerState : MonoBehaviour
                 {
                     if (--min <= 0)
                     {
+                        audio.loop = false;
+                        audio.Stop();
                         CompleteCombine(); // 조합 완료 함수
                         return;
                     }
@@ -167,7 +185,8 @@ public class playerState : MonoBehaviour
          * if ((full += value) > maxFull) full = maxFull;
          * else if (full <= 0) 포만감 0 이하일 시 함수 호출
          */
-
+        audio.clip = eatSound;
+        audio.Play();
         full += value;
     }
 

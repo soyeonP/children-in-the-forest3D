@@ -24,11 +24,6 @@ public class MoveCharacter : MonoBehaviour {
 
     private AudioSource audio;
     public AudioClip walkSound;
-    public AudioClip eatSound;
-    public AudioClip cryingSound;
-    public AudioClip makingSound;
-    public AudioClip trapSound;
-    public AudioClip CookSound;
 
 
 
@@ -69,11 +64,6 @@ public class MoveCharacter : MonoBehaviour {
            // audio.Play();
             ani.SetBool("Walk", false);
         }
-
-        if (ani.GetBool("Walk") == true)
-        {
-            audio.Play();
-        }
  
     }
 
@@ -92,6 +82,12 @@ public class MoveCharacter : MonoBehaviour {
 
     public void SetWalkSound()
     {
-       // audio.Play();
+        audio.clip = walkSound;
+        audio.Play();
+    }
+
+    public void SetSoundOff()
+    {
+        audio.Stop();
     }
 }
