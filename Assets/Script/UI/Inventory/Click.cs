@@ -16,6 +16,7 @@ public class Click : MonoBehaviour {
 
     private MovePointForCam move;
 
+    private AudioSource audio;
     private void Start()
     {
         GetBtn.SetActive(false);
@@ -23,6 +24,8 @@ public class Click : MonoBehaviour {
         checkBtn.SetActive(false);
 
         move = GameObject.Find("Main Camera").GetComponent<MovePointForCam>();
+
+        audio = GetComponent<AudioSource>();
     }
 
     private void Update () {
@@ -105,6 +108,7 @@ public class Click : MonoBehaviour {
 
     public void ClickedGetBtn()
     {
+        audio.Play();
         // 캐릭터에 따라 조사시간 걸리게 설정 (해야함)
         Debug.Log("a");
         int charnum = GameObject.Find("Main Camera").GetComponent<MovePointForCam>().getMoveChar();

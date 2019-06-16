@@ -65,6 +65,8 @@
     <Compile Include="Assets\Characters\Werewolf\ExampleScripts\FollowCam.cs" />
     <Compile Include="Assets\Characters\Werewolf\ExampleScripts\SceneAnimation.cs" />
     <Compile Include="Assets\gameController.cs" />
+    <Compile Include="Assets\MoveCharacter.cs" />
+    <Compile Include="Assets\MovePointForCam.cs" />
     <Compile Include="Assets\Objects\Rabbits\Demo\Scripts\AnimatorParamatersChange.cs" />
     <Compile Include="Assets\Script\Data\CsvFileCommon.cs" />
     <Compile Include="Assets\Script\Data\CsvFileWriter.cs" />
@@ -80,8 +82,6 @@
     <Compile Include="Assets\Script\Object\Huntable.cs" />
     <Compile Include="Assets\Script\Object\ItemSpawner.cs" />
     <Compile Include="Assets\Script\player\JointoTogether.cs" />
-    <Compile Include="Assets\Script\player\MoveCharacter.cs" />
-    <Compile Include="Assets\Script\player\MovePointForCam.cs" />
     <Compile Include="Assets\Script\player\playerState.cs" />
     <Compile Include="Assets\Script\player\SelectPlayer.cs" />
     <Compile Include="Assets\Script\StartScene\StartButtonManager.cs" />

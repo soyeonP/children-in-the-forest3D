@@ -17,7 +17,7 @@ public class Monster_chasing : MonoBehaviour
 
     Animator anime;
 
-    // Start is called before the first frame update
+    private AudioSource audio;
 
     void Start()
     {
