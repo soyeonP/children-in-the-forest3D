@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class MovePointForCam : MonoBehaviour
 {
+    public GameObject Panels;
 
     /* camera target */
     public Transform target;
@@ -148,7 +149,9 @@ public class MovePointForCam : MonoBehaviour
 
     void getPosition()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.currentSelectedGameObject )
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.currentSelectedGameObject 
+            && !Panels.transform.GetChild(0).gameObject.activeInHierarchy
+            && !Panels.transform.GetChild(1).gameObject.activeInHierarchy) // 인벤토리, 제작 UI 안 켜져 있을 때만 이동하도록!!
         {
             Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit Hit;
@@ -157,7 +160,8 @@ public class MovePointForCam : MonoBehaviour
             {
                 Debug.Log(Hit.point);
 
-                if (Hit.collider.name == "Plane")
+                if (Hit.collider.name == "Plane"
+                    && Hit.collider.tag != "Object" && Hit.collider.tag != "Checkable" && Hit.collider.tag != "Huntable")
                 {
                     switch (MoveChar)
                     {

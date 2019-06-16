@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inventory : MonoBehaviour {
+public class Inventory : MonoBehaviour
+{
 
     /* 가져올 게임 오브젝트들 */
     public GameObject SlotsParent; // 슬롯 Parent
@@ -71,7 +72,16 @@ public class Inventory : MonoBehaviour {
         InfoSlot.gameObject.SetActive(true);
         Item item = slot.ItemReturn();
 
-        if (DataManager.dataManager.isGot(item.ID) == 0) // 처음 줍거나 써본 적 없을 때
+        if (item.type != Item.ItemType.food && item.type != Item.ItemType.memo)
+        {
+            useBtn.enabled = false;
+        }
+        else
+        {
+            useBtn.enabled = true;
+        }
+
+        if (!ItemIO.isItemGot(item.ID)) // 처음 줍거나 써본 적 없을 때
         {
             checkBtn.interactable = true; // 체크 버튼 사용 가능
 
@@ -80,6 +90,7 @@ public class Inventory : MonoBehaviour {
             Image image = InfoSlot.GetChild(1).GetComponent<Image>();
             image.sprite = item.sprite;
             image.color = Color.black;
+            InfoSlot.GetChild(2).GetComponent<Text>().text = "???";
             InfoSlot.GetChild(3).GetComponent<Text>().text = "???";
 
             /* 기존 버튼 리스너 모두 제거 */
@@ -101,6 +112,7 @@ public class Inventory : MonoBehaviour {
             Image image = InfoSlot.GetChild(1).GetComponent<Image>();
             image.sprite = item.sprite;
             image.color = Color.white;
+            InfoSlot.GetChild(2).GetComponent<Text>().text = item.type.ToString().ToUpper();
             InfoSlot.GetChild(3).GetComponent<Text>().text = item.effect;
 
             /* 기존 버튼 리스너 모두 제거 */
@@ -121,7 +133,7 @@ public class Inventory : MonoBehaviour {
     public bool AddItem(int ChildNum, Item item) // 슬롯 차있는지 확인 후 슬롯에 addItem
     {
         int startSlotNum = ChildNum * 6; // 해당 번호 애기 인벤토리 시작 인덱스
-        
+
         for (int i = startSlotNum; i < startSlotNum + 6; i++)
         {
             Slot slot = slots[i].GetComponent<Slot>();
@@ -132,7 +144,7 @@ public class Inventory : MonoBehaviour {
             slot.AddItem(item);
             return true;
         }
-        
+
         return false;
     }
 
@@ -175,7 +187,7 @@ public class Inventory : MonoBehaviour {
         }
         else // 슬롯이 차있으면
         {
-            Item item = slot.ItemReturn(); 
+            Item item = slot.ItemReturn();
             slot.emptyItem(); // 선택한 슬롯의 아이템 기억
 
             Swap(slot, firSlot); // firSlot의 아이템을 slot에 넣음
@@ -186,7 +198,7 @@ public class Inventory : MonoBehaviour {
     }
 
     public void Swap(Slot xFirst, Slot oSecond) // (swap 보조함수) xFirst에 oSecond가 가지고 있던 아이템 넣고 oSecond 비우기
-    { 
+    {
         // 두 슬롯의 인벤토리 주인 다를 경우 빠꾸먹이는 부분 추가
 
         Item item = oSecond.ItemReturn();
@@ -266,7 +278,7 @@ public class Inventory : MonoBehaviour {
     {
         int count = 0;
 
-        for (int i = 6 * num; i < 6 * (num + 1) ; i++)
+        for (int i = 6 * num; i < 6 * (num + 1); i++)
         {
             if (!slots[i].GetComponent<Slot>().isSlots())
                 break;
@@ -279,11 +291,15 @@ public class Inventory : MonoBehaviour {
     public void OpenMemo(string id)
     {
         memoPanel.SetActive(true);
+        Debug.Log(id);
+        Sprite memo = Resources.Load<Sprite>("memo/" + id);
+        Image image = memoPanel.GetComponent<Image>();
+        image.sprite = memo;
+        image.SetNativeSize();
+        image.rectTransform.localScale = new Vector3(0.7f, 0.7f);
 
-        // 제목 설정
-        memoPanel.transform.GetChild(1).GetComponent<Text>().text = "제목";
 
-        // 내용 설정
-        memoPanel.transform.GetChild(1).GetComponent<Text>().text = "내용";
+        // 레시피 isgot 설정해주기
+        PlayerPrefs.SetInt("isGotpoison_meat", 1);
     }
 }

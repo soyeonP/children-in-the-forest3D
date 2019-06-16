@@ -42,7 +42,7 @@ public class Slot : MonoBehaviour {
         SetSlots(isSlot);
         ItemImg.sprite = sprite;
 
-        if (item != null && DataManager.dataManager.isGot(item.ID) == 0) 
+        if (item != null && !ItemIO.isItemGot(item.ID)) 
         {
             ItemImg.color = Color.black;
         }
@@ -58,7 +58,7 @@ public class Slot : MonoBehaviour {
     {
         ObjManager.objManager.inventory.RenewInfo(this);
 
-        if (DataManager.dataManager.isGot(item.ID) == 0)
+        if (!ItemIO.isItemGot(item.ID))
         {
             ItemImg.color = Color.black;
         }
@@ -66,7 +66,7 @@ public class Slot : MonoBehaviour {
 
     public void CheckItem() // 아이템 조사 시
     {
-        DataManager.dataManager.GotItem(item.ID);
+        ItemIO.GotItemSave(item.ID);
         ObjManager.objManager.inventory.RenewInfo(this);
         ItemImg.color = Color.white;
 
@@ -87,6 +87,8 @@ public class Slot : MonoBehaviour {
                 playerState character = Children[childNum].GetComponent<playerState>();
                 character.ChangeFull(dm.GetFull(item.ID));
                 character.ChangeHP(dm.GetHP(item.ID));
+                ItemIO.GotItemSave(item.ID);
+                emptyItem();
                 break;
 
             case Item.ItemType.memo:
@@ -101,8 +103,6 @@ public class Slot : MonoBehaviour {
 
 
         /* 아이템 비우고 인벤토리 새로고침 */
-        dm.GotItem(item.ID);
-        emptyItem();
         ObjManager.objManager.inventory.RenewInfo();
         ObjManager.objManager.inventory.RenewInventory();
     }
@@ -118,7 +118,7 @@ public class Slot : MonoBehaviour {
     {
         if (item != null)
         {
-            if (DataManager.dataManager.isGot(item.ID) == 1)
+            if (ItemIO.isItemGot(item.ID))
                 ItemImg.color = Color.white;
             else ItemImg.color = Color.black;
         }

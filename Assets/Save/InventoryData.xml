@@ -1,0 +1,9 @@
+<Child>
+  <Item name="송이버섯" ID="mushroom" tool="0" effect="포만감 +2" slotNum="0" type="food" />
+  <Item name="나뭇가지" ID="branch" tool="0" effect="사용 불가" slotNum="1" type="material" />
+  <Item name="토끼 고기" ID="deadRabbit" tool="새총" effect="포만감 +2" slotNum="6" type="food" />
+  <Item name="약초" ID="grass1" tool="0" effect="체력 +50" slotNum="7" type="food" />
+  <Item name="메모" ID="memo_corpse" tool="0" effect="누군가가 남긴 메모" slotNum="8" type="memo" />
+  <Item name="새총" ID="sling" tool="0" effect="자동 사용" slotNum="12" type="tool" />
+  <Item name="메모" ID="memo_corpse" tool="0" effect="누군가가 남긴 메모" slotNum="13" type="memo" />
+</Child>

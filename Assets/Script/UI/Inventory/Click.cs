@@ -8,15 +8,20 @@ public class Click : MonoBehaviour {
 
     public GameObject GetBtn;
     public GameObject huntBtn;
+    public GameObject checkBtn;
     public GameObject clickedObj;
 
     public GameObject bullet;
+    public Image HuntingUI;
 
     private MovePointForCam move;
 
     private void Start()
     {
         GetBtn.SetActive(false);
+        huntBtn.SetActive(false);
+        checkBtn.SetActive(false);
+
         move = GameObject.Find("Main Camera").GetComponent<MovePointForCam>();
     }
 
@@ -43,24 +48,37 @@ public class Click : MonoBehaviour {
                 {
                     // TODO 새총 보유중인지 확인
                     int nowChar = move.getMoveChar();
-                    //if (ObjManager.objManager.inventory.getItemCount("slinger", nowChar) > 0) {
-                    // 아직 새총 추가 안돼서 조건 안 걸어둠
+                    if (ObjManager.objManager.inventory.getItemCount("sling", nowChar - 1) > 0)
+                    {
+                        // 아직 새총 추가 안돼서 조건 안 걸어둠
                         clickedObj = hit.collider.gameObject;
 
-                    Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+                        Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
 
-                    // 상호작용 버튼 출력
-                    huntBtn.SetActive(true);
-                    huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
-                    //}
+                        // 상호작용 버튼 출력
+                        huntBtn.SetActive(true);
+                        huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
+                        //}
+                    }
+                }
+                else if (hit.collider.gameObject.tag == "Checkable")
+                {
+
+                    clickedObj = hit.collider.gameObject;
+                    checkBtn.SetActive(true);
+
+                    Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+                    checkBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
                 }
                 else
                 {
                     GetBtn.SetActive(false);
                     huntBtn.SetActive(false);
+                    checkBtn.SetActive(false);
                     clickedObj = null;
                 }
             }
+
         }
 
         if (clickedObj != null)
@@ -72,12 +90,18 @@ public class Click : MonoBehaviour {
             }
             if (huntBtn.activeInHierarchy)
             {
-
                 Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
                 huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
             }
+            if (checkBtn.activeInHierarchy)
+            {
+                Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
+                checkBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
+            }
+
         }
-	}
+
+    }
 
     public void ClickedGetBtn()
     {
@@ -98,10 +122,47 @@ public class Click : MonoBehaviour {
         //GameObject bul = Instantiate(bullet);
         //bul.GetComponent<Rigidbody>().AddForce
 
+        int character = move.getMoveChar();
+        HuntingUI.gameObject.SetActive(true);
+        IEnumerator coroutine = FillImage(HuntingUI, character);
+        StartCoroutine(coroutine);
+    }
+
+    public void ClickedCheckBtn()
+    {
+        // 메모 획득
+        // 체크된거 표시하기
+        checkBtn.SetActive(false);
+
+        int charnum = move.getMoveChar();
+        if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;
+
+        clickedObj.GetComponent<Item>().AddItem(charnum - 1);
+    }
+
+    IEnumerator FillImage(Image image, int selChar)
+    {
+        if (selChar == -1 || selChar == 0 || selChar == 4) selChar = 1;
+        GameObject child = DataManager.dataManager.GetChildren()[selChar - 1];
+        image.fillAmount = 0;
+
+        while (image.fillAmount < 1)
+        {
+            Debug.Log("a");
+            image.gameObject.transform.position = Camera.main.WorldToScreenPoint(child.transform.position) + new Vector3(0, 40, 0);
+            image.fillAmount += 0.05f;
+            yield return null;
+        }
+
+        image.fillAmount = 0;
+        image.gameObject.SetActive(false);
 
         // 일단 걍 토끼가 죽게 하자
+        clickedObj.GetComponent<Animator>().SetTrigger("dead");
         clickedObj.GetComponent<Huntable>().Kill();
+
         // 사냥 버튼 끄기
         huntBtn.SetActive(false);
     }
+
 }

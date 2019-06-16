@@ -54,7 +54,7 @@ public class ItemDrag : MonoBehaviour {
             slot.UpdateInfo(true, slot.DefaultImg);
             gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.white;
 
-            if (DataManager.dataManager.isGot(slot.ItemReturn().ID) == 0)
+            if (!ItemIO.isItemGot(slot.item.ID))
             {
                 emptyImg.color = Color.black;
             }

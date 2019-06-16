@@ -33,7 +33,8 @@ public class Combine : MonoBehaviour
         /* 아이템 제작 시작 */
         // 진행상황 표시 UI 출력
         GameObject ui = Instantiate(makingUI, canvas.transform);
-        ui.transform.position = Camera.main.WorldToScreenPoint(states[childNum - 1].gameObject.transform.position);
+        ui.transform.position = Camera.main.WorldToScreenPoint(states[childNum - 1].gameObject.transform.position)
+            + new Vector3 (0, 20, 0);
         // 위치 조정 필요
 
         // 캐릭터 아이템 제작 상태

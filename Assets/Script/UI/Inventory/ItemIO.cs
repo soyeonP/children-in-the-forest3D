@@ -7,6 +7,54 @@ public sealed class ItemIO : MonoBehaviour {
 
     public GameObject ObjMan;
 
+    public static void GotItemSave (string id)
+    {
+        XmlDocument xmldoc = new XmlDocument();
+        XmlElement child;
+
+        if (System.IO.File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
+        { // 파일 존재할 경우
+            xmldoc.Load(Application.dataPath + "/Save/ItemGetData.xml");
+            child = xmldoc["Items"];
+        }
+        else
+        {
+            child = xmldoc.CreateElement("Items");
+            xmldoc.AppendChild(child);
+        }
+
+        XmlElement idData = xmldoc.CreateElement("Item");
+        idData.SetAttribute("ID", id);
+
+        child.AppendChild(idData);
+
+        xmldoc.Save(Application.dataPath + "/Save/ItemGetData.xml");
+    }
+
+    public static bool isItemGot (string id)
+    {
+        XmlDocument xmldoc = new XmlDocument();
+        XmlElement child;
+
+        if (System.IO.File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
+        { // 파일 존재할 경우
+            xmldoc.Load(Application.dataPath + "/Save/ItemGetData.xml");
+            child = xmldoc["Items"];
+        }
+        else
+        {
+            return false;
+        }
+
+        foreach (XmlElement itemElement in child.ChildNodes)
+        {
+            if (itemElement.GetAttribute("ID").ToString() == id)
+                return true;
+        }
+
+        return false;
+    }
+
     public static void SaveData()
     {
         List<GameObject> slots = ObjManager.objManager.inventory.slots;
@@ -79,7 +127,25 @@ public sealed class ItemIO : MonoBehaviour {
             item.effect = itemElement.GetAttribute("effect");
             item.tool = itemElement.GetAttribute("tool");
             item.sprite = DataManager.dataManager.findSprite(item.ID);
-            //item.type = itemElement.GetAttribute("type"); switch - case 문 돌려서 적용시키기
+
+            switch (itemElement.GetAttribute("type"))
+            {
+                case "food":
+                    item.type = Item.ItemType.food;
+                    break;
+
+                case "tool":
+                    item.type = Item.ItemType.tool;
+                    break;
+
+                case "material":
+                    item.type = Item.ItemType.material;
+                    break;
+
+                case "memo":
+                    item.type = Item.ItemType.memo;
+                    break;
+            }
 
             items[System.Convert.ToInt32(itemElement.GetAttribute("slotNum"))] = item;
         }

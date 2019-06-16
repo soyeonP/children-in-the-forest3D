@@ -37,7 +37,9 @@ public class Item : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
+            if (this.type != ItemType.memo)
+                gameObject.SetActive(false);
+            else this.gameObject.tag = "Untagged";
         }
     }
 }

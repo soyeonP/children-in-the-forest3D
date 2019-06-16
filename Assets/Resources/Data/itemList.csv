@@ -5,4 +5,9 @@
 광대버섯,mushroomRed,체력 -50,0,0,-50,0,0,food
 나뭇가지,branch,사용 불가,0,0,0,0,0,material
 토끼 고기,deadRabbit,포만감 +2,새총,0,0,2,0,food
-버섯 수프,mushroom,허기 50 회복,0,0,0,50,0,food
+버섯 수프,mushroom_soup,허기 50 회복,0,0,0,50,0,food
+토끼,rabbit,토끼,0,0,0,0,0,food
+새총,sling,자동 사용,0,0,0,0,0,tool
+메모,memo_corpse,누군가가 남긴 메모,0,0,0,0,0,memo
+독 고기,poison_meat,독이 든 고기,0,0,0,0,0,tool
+은단검,sword,은으로 된 검,0,0,0,0,0,tool

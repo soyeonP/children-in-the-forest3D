@@ -29,6 +29,12 @@ public class CombineUI : MonoBehaviour
 
     private void Start()
     {
+        /* 임시 설정 */
+        PlayerPrefs.SetInt("isGotsling", 1);
+        PlayerPrefs.SetInt("isGotmushroom_soup", 1);
+        PlayerPrefs.SetInt("isGotpoison_meat", 0);
+
+
         dm = DataManager.dataManager;
         cb = GetComponent<Combine>();
         recipeList = dm.GetRecipeList();
@@ -45,6 +51,24 @@ public class CombineUI : MonoBehaviour
         }
 
         // 다른 일 하고 있는 캐릭터 있는지 체크하고 있다면 다른일 리본 띄우기
+    }
+
+    public void SetRecipeBtn()
+    {
+        for (int i = 0; i < recipeParent.transform.childCount; i++)
+        {
+            GameObject newRecipe = recipeParent.transform.GetChild(i).gameObject;
+
+            if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
+            { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
+                newRecipe.GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                newRecipe.GetComponent<Button>().interactable = true;
+            }
+
+        }
     }
 
     public void InitCombiner()
@@ -89,6 +113,8 @@ public class CombineUI : MonoBehaviour
         }
 
         SetCharBtnSelected(selectedChar);
+
+        SetRecipeBtn();
     }
 
     private void MakeBtnRecipe(Dictionary<string, object> recipe)
@@ -100,15 +126,16 @@ public class CombineUI : MonoBehaviour
         newRecipe.transform.GetChild(0).GetComponent<Image>().sprite = dm.findSprite(newRecipe.name);
         // 아이템 이름 설정
         newRecipe.transform.GetChild(1).GetComponent<Text>().text = dm.getName(newRecipe.name);
+        newRecipe.GetComponent<Button>().onClick.AddListener(() => onClickRecipe(recipe));
 
-        if (System.Convert.ToInt16(recipe["isGot"]) == 0)
+        //if (System.Convert.ToInt16(recipe["isGot"]) == 0)
+        if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
         { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
             newRecipe.GetComponent<Button>().interactable = false;
         }
         else
         {
             newRecipe.GetComponent<Button>().interactable = true;
-            newRecipe.GetComponent<Button>().onClick.AddListener(() => onClickRecipe(recipe));
         }
     }
 
@@ -119,24 +146,24 @@ public class CombineUI : MonoBehaviour
         Item item = dm.GetItem(id);
 
 
-                /* 선택 아이템 정보 창 설정 */
+        /* 선택 아이템 정보 창 설정 */
 
         itemInfo.SetActive(true);
-            // 스프라이트 설정
+        // 스프라이트 설정
         itemInfo.transform.GetChild(0).GetComponent<Image>().sprite = dm.findSprite(id);
-            // 아이템 이름 설정
+        // 아이템 이름 설정
         itemInfo.transform.GetChild(1).GetComponent<Text>().text = item.name;
-            // 아이템 종류 설정
+        // 아이템 종류 설정
         itemInfo.transform.GetChild(2).GetComponent<Text>().text = item.type.ToString();
-            // 아이템 설명 설정
+        // 아이템 설명 설정
         itemInfo.transform.GetChild(3).GetComponent<Text>().text = item.effect;
 
 
-                /* 아이템 제작 정보 창 설정 */
+        /* 아이템 제작 정보 창 설정 */
 
         costInfo.SetActive(true);
 
-            // 재료 설정
+        // 재료 설정
         int matCount = System.Convert.ToInt16(recipe["matCount"]);
 
         for (int i = 0; i < matCount; i++)
@@ -156,11 +183,11 @@ public class CombineUI : MonoBehaviour
         }
 
         // 제작 시간 설정
-        costInfo.transform.GetChild(2).GetComponent<Text>().text = "제작 시간 : " +
+        costInfo.transform.GetChild(3).GetComponent<Text>().text = "제작 시간 : " +
             System.Convert.ToString(recipe["time"]) + "초";
 
         // 필요 통찰력 설정
-        costInfo.transform.GetChild(3).GetChild(1).GetComponent<Text>().text 
+        costInfo.transform.GetChild(4).GetChild(1).GetComponent<Text>().text
             = " / " + System.Convert.ToInt16(recipe["insight"]).ToString();
 
         setCharInfo(); // 현재 캐릭터별 소지 재료 수와 통찰력 설정
@@ -175,7 +202,7 @@ public class CombineUI : MonoBehaviour
         {
             combinable = false;
 
-            Text nowInsight = costInfo.transform.GetChild(3).GetChild(0).GetComponent<Text>();
+            Text nowInsight = costInfo.transform.GetChild(4).GetChild(0).GetComponent<Text>();
             nowInsight.text = "?";
             nowInsight.color = Color.red;
         }
@@ -188,7 +215,7 @@ public class CombineUI : MonoBehaviour
                 if (playerStates[insightIndex].insight < playerStates[i].insight) insightIndex = i;
             }
 
-            Text nowInsight = costInfo.transform.GetChild(3).GetChild(0).GetComponent<Text>();
+            Text nowInsight = costInfo.transform.GetChild(4).GetChild(0).GetComponent<Text>();
 
             int insight = playerStates[insightIndex].insight;
             nowInsight.text = insight.ToString();
@@ -202,7 +229,7 @@ public class CombineUI : MonoBehaviour
         }
         else                        // 플레이어 선택했을 경우
         {
-            Text nowInsight = costInfo.transform.GetChild(3).GetChild(0).GetComponent<Text>();
+            Text nowInsight = costInfo.transform.GetChild(4).GetChild(0).GetComponent<Text>();
 
             int insight = playerStates[selectedChar - 1].insight;
             nowInsight.text = insight.ToString();
@@ -270,7 +297,8 @@ public class CombineUI : MonoBehaviour
         cb.StartCombine(System.Convert.ToString(recipe["comID"]), selectedChar);
     }
 
-    private void SetCharBtnSelected(int n) {
+    private void SetCharBtnSelected(int n)
+    {
 
         for (int i = 1; i < BtnChars.transform.childCount; i++)
         {

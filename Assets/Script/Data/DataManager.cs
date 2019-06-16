@@ -44,7 +44,7 @@ public class DataManager : MonoBehaviour {
     }
 
 
-    private void Awake() // xml 로드
+    private void Awake() // csv, xml 로드
     {
         /* 오브젝트 아이템 리스트 로드 */
         itemList = CSVReader.Read("Data/itemList");
@@ -61,6 +61,22 @@ public class DataManager : MonoBehaviour {
             item.effect = itemList[i]["effect"].ToString();
             item.tool = itemList[i]["tool"].ToString();
             item.sprite = findSprite(item.ID);
+
+            switch (itemList[i]["type"].ToString())
+            {
+                case "food":
+                    item.type = Item.ItemType.food;
+                    break;
+                case "material":
+                    item.type = Item.ItemType.material;
+                    break;
+                case "memo":
+                    item.type = Item.ItemType.memo;
+                    break;
+                case "tool":
+                    item.type = Item.ItemType.tool;
+                    break;
+            }
 
             items.Add(item);
         }
@@ -101,9 +117,10 @@ public class DataManager : MonoBehaviour {
 
         return "";
     }
-
+    /*
     public int isGot(string id) // 아이템 분석 혹은 사용한 적 있는지 확인
     {
+        
         for (int i = 0; i < itemList.Count; i++)
         {
             if (itemList[i]["ID"].ToString() == id)
@@ -111,10 +128,15 @@ public class DataManager : MonoBehaviour {
                 return System.Convert.ToInt32(itemList[i]["isGot"].ToString());
             }
         }
+        
+
+        ItemIO.isItemGot(id);
 
         return 0;
     }
+    */
 
+        /*
     public void GotItem(string id) // 아이템 사용 혹은 분석 시
     {
         for (int i = 0; i < itemList.Count; i++)
@@ -126,6 +148,7 @@ public class DataManager : MonoBehaviour {
             }
         }
     }
+        */
 
     public Sprite findSprite(string id) // 아이템 ID에 해당하는 스프라이트 리턴
     {

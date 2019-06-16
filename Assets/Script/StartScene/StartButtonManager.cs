@@ -24,6 +24,9 @@ public class StartButtonManager : MonoBehaviour
         File.Delete(Application.dataPath + "/SaveFile.dat");
         if (File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
             File.Delete(Application.dataPath + "/Save/InventoryData.xml");
+        if (File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
+            File.Delete(Application.dataPath + "/Save/ItemGetData.xml");
+
         SceneManager.LoadScene("Main");
 
     }

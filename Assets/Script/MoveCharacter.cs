@@ -22,6 +22,8 @@ public class MoveCharacter : MonoBehaviour {
     /*save load 용 */
     private SaveLoad saveNLoad; 
 
+    public void SetCanMove (bool canMove) { this.canMove = canMove; }
+
     // Start is called before the first frame update
     void Start()
     {
