@@ -12,10 +12,10 @@ public class EndSceneManager : MonoBehaviour
     void Start()
     {
         File.Delete(Application.dataPath + "/SaveFile.dat");
-        if (File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
-            File.Delete(Application.dataPath + "/Save/InventoryData.xml");
-        if (File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
-            File.Delete(Application.dataPath + "/Save/ItemGetData.xml");
+        if (File.Exists(Application.dataPath + "/InventoryData.xml"))
+            File.Delete(Application.dataPath + "/InventoryData.xml");
+        if (File.Exists(Application.dataPath + "/ItemGetData.xml"))
+            File.Delete(Application.dataPath + "/ItemGetData.xml");
 
         Debug.Log("delete file succeed");
     }

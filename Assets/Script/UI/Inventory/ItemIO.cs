@@ -12,9 +12,9 @@ public sealed class ItemIO : MonoBehaviour {
         XmlDocument xmldoc = new XmlDocument();
         XmlElement child;
 
-        if (System.IO.File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
+        if (System.IO.File.Exists(Application.dataPath + "/ItemGetData.xml"))
         { // 파일 존재할 경우
-            xmldoc.Load(Application.dataPath + "/Save/ItemGetData.xml");
+            xmldoc.Load(Application.dataPath + "/ItemGetData.xml");
             child = xmldoc["Items"];
         }
         else
@@ -28,7 +28,7 @@ public sealed class ItemIO : MonoBehaviour {
 
         child.AppendChild(idData);
 
-        xmldoc.Save(Application.dataPath + "/Save/ItemGetData.xml");
+        xmldoc.Save(Application.dataPath + "/ItemGetData.xml");
     }
 
     public static bool isItemGot (string id)
@@ -36,9 +36,9 @@ public sealed class ItemIO : MonoBehaviour {
         XmlDocument xmldoc = new XmlDocument();
         XmlElement child;
 
-        if (System.IO.File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
+        if (System.IO.File.Exists(Application.dataPath + "/ItemGetData.xml"))
         { // 파일 존재할 경우
-            xmldoc.Load(Application.dataPath + "/Save/ItemGetData.xml");
+            xmldoc.Load(Application.dataPath + "/ItemGetData.xml");
             child = xmldoc["Items"];
         }
         else
@@ -102,20 +102,20 @@ public sealed class ItemIO : MonoBehaviour {
             i++;
         }
 
-        XmlDoc.Save(Application.dataPath + "/Save/InventoryData.xml");
+        XmlDoc.Save(Application.dataPath + "/InventoryData.xml");
     }
 
     public static Item[] LoadData()
     {
         Item[] items = new Item[18];
 
-        if (!System.IO.File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
+        if (!System.IO.File.Exists(Application.dataPath + "/InventoryData.xml"))
         {
             return null;
         }
 
         XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(Application.dataPath + "/Save/InventoryData.xml");
+        xmlDoc.Load(Application.dataPath + "/InventoryData.xml");
         XmlElement child = xmlDoc["Child"];
 
         foreach (XmlElement itemElement in child.ChildNodes)

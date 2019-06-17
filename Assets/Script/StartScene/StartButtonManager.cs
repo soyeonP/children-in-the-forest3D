@@ -11,7 +11,7 @@ public class StartButtonManager : MonoBehaviour
 
     private void Start()
     {
-
+        Debug.Log(Application.persistentDataPath);
         if (File.Exists(Application.dataPath + "/SaveFile.dat")) isSaved = true;
         else
         {
@@ -26,10 +26,10 @@ public class StartButtonManager : MonoBehaviour
         PlayerPrefs.SetInt("isGotpoison_meat", 0);
 
         File.Delete(Application.dataPath + "/SaveFile.dat");
-        if (File.Exists(Application.dataPath + "/Save/InventoryData.xml"))
-            File.Delete(Application.dataPath + "/Save/InventoryData.xml");
-        if (File.Exists(Application.dataPath + "/Save/ItemGetData.xml"))
-            File.Delete(Application.dataPath + "/Save/ItemGetData.xml");
+        if (File.Exists(Application.dataPath + "/InventoryData.xml"))
+            File.Delete(Application.dataPath + "/InventoryData.xml");
+        if (File.Exists(Application.dataPath + "/ItemGetData.xml"))
+            File.Delete(Application.dataPath + "/ItemGetData.xml");
 
         SceneManager.LoadScene("Main");
 
