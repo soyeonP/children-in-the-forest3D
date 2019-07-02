@@ -96,8 +96,10 @@
     <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
     <Compile Include="Assets\SetSound.cs" />
     <None Include="Assets\Save\ItemGetData.xml" />
+    <None Include="Assets\InventoryData.xml" />
     <None Include="Assets\Save\InventoryData.xml" />
     <None Include="Assets\Save\dontremove.txt" />
+    <None Include="Assets\ItemGetData.xml" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/CIF/CIF3D/children-in-the-forest3D/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

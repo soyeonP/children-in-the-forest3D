@@ -94,6 +94,9 @@ public sealed class ItemIO : MonoBehaviour {
                     case Item.ItemType.tool:
                         setting.SetAttribute("type", "tool");
                         break;
+                    case Item.ItemType.trap:
+                        setting.SetAttribute("type", "trap");
+                        break;
                 }
 
                 child.AppendChild(setting);
@@ -144,6 +147,10 @@ public sealed class ItemIO : MonoBehaviour {
 
                 case "memo":
                     item.type = Item.ItemType.memo;
+                    break;
+
+                case "trap":
+                    item.type = Item.ItemType.trap;
                     break;
             }
 

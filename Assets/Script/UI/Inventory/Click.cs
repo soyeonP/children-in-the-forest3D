@@ -109,8 +109,8 @@ public class Click : MonoBehaviour {
     public void ClickedGetBtn()
     {
         audio.Play();
+
         // 캐릭터에 따라 조사시간 걸리게 설정 (해야함)
-        Debug.Log("a");
         int charnum = GameObject.Find("Main Camera").GetComponent<MovePointForCam>().getMoveChar();
 
         if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;

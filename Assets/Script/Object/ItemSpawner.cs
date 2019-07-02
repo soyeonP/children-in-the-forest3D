@@ -76,6 +76,8 @@ public class ItemSpawner : MonoBehaviour
         GameObject objPrefab = dm.GetObj(item.ID);
         if (objPrefab != null)
         {
+            Debug.Log(objPrefab.name);
+
             GameObject obj = Instantiate(objPrefab, objParent.transform);
             obj.AddComponent<Item>();
             obj.AddComponent<BoxCollider>();

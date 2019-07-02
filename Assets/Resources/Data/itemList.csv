@@ -9,5 +9,5 @@
 토끼,rabbit,토끼,0,0,0,0,0,food
 새총,sling,자동 사용,0,0,0,0,0,tool
 메모,memo_corpse,누군가가 남긴 메모,0,0,0,0,0,memo
-독 고기,poison_meat,독이 든 고기,0,0,0,0,0,tool
+독 고기,poison_meat,독이 든 고기 - 사용을 누르면 설치할 수 있다,0,0,0,0,0,trap
 은단검,sword,은으로 된 검,0,0,0,0,0,tool

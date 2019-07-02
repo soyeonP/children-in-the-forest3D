@@ -72,7 +72,7 @@ public class Inventory : MonoBehaviour
         InfoSlot.gameObject.SetActive(true);
         Item item = slot.ItemReturn();
 
-        if (item.type != Item.ItemType.food && item.type != Item.ItemType.memo)
+        if (item.type != Item.ItemType.food && item.type != Item.ItemType.memo && item.type != Item.ItemType.trap)
         {
             useBtn.enabled = false;
         }

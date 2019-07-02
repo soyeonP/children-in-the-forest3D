@@ -16,7 +16,8 @@ public class Item : MonoBehaviour
         food,       // 음식
         tool,       // 도구
         material,   // 합성 재료
-        memo        // 메모
+        memo,       // 메모
+        trap        // 함정
     }
 
     private Inventory iv;
