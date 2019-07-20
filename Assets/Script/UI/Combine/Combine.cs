@@ -45,10 +45,4 @@ public class Combine : MonoBehaviour
     {
         // 캐릭터 조합 상태 변경
     }
-
-    public void GetCombine() // 조합 완료 후 아이템 획득
-    {
-        // 캐릭터 조합 상태 변경
-        // 인벤토리에 아이템 추가
-    }
 }

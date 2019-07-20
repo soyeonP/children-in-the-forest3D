@@ -9,17 +9,17 @@ public class Slot : MonoBehaviour {
     public Sprite DefaultImg;       // 빈 슬롯 이미지
 
     public Image ItemImg;           // 0번 child의 image (item image 보여줌)
-    private bool isSlot = false;    // 슬롯 비었으면 false, 차 있으면 true
+    protected bool isSlot = false;    // 슬롯 비었으면 false, 차 있으면 true
 
-    private int childNum;
+    protected int childNum;
     public GameObject[] Children;
 
-    public void SetChildNum(int num) { childNum = num; }
+    public virtual void SetChildNum(int num) { childNum = num; }
     public Item ItemReturn() { return this.item; }
     public bool isSlots() { return isSlot; } // 차있으면 true
     public void SetSlots(bool isSlot) { this.isSlot = isSlot; } // isSlot -> 비면 false
 
-    public void AddItem(Item item)
+    public virtual void AddItem(Item item)
     {
         this.item = item;
         UpdateInfo(true, item.sprite);
@@ -37,8 +37,10 @@ public class Slot : MonoBehaviour {
         return;
     }
 
-    public void UpdateInfo(bool isSlot, Sprite sprite)
+    public virtual void UpdateInfo(bool isSlot, Sprite sprite)
     {
+        // 인벤토리 저장 및 그림자 설정
+
         SetSlots(isSlot);
         ItemImg.sprite = sprite;
 
@@ -115,11 +117,7 @@ public class Slot : MonoBehaviour {
                 break;
         }
 
-        /* 아이템 타입이 음식일 시 */
-
-
-
-        /* 아이템 비우고 인벤토리 새로고침 */
+        /* 인벤토리 새로고침 */
         ObjManager.objManager.inventory.RenewInfo();
         ObjManager.objManager.inventory.RenewInventory();
     }

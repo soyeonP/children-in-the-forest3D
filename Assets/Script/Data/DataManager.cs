@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour {
     private static DataManager _dataManager = null;
+    public SelectPlayer selectPlayer;
 
     /* 오브젝트 아이템 리스트 */
     private List<Dictionary<string, object>> itemList;
@@ -46,6 +47,8 @@ public class DataManager : MonoBehaviour {
 
     private void Awake() // csv, xml 로드
     {
+        selectPlayer = GetComponent<SelectPlayer>();
+
         /* 오브젝트 아이템 리스트 로드 */
         itemList = CSVReader.Read("Data/itemList");
         recipeList = CSVReader.Read("Data/RecipeList");
@@ -265,7 +268,6 @@ public class DataManager : MonoBehaviour {
             if (System.Convert.ToString(huntableList[i]["ID"]) == id)
             {
                 huntable = huntableList[i];
-                Debug.Log("D");
             }
         }
 

@@ -7,7 +7,7 @@ public class CombineUI : MonoBehaviour
 {
     private DataManager dm;
     private MovePointForCam move;
-    private Combine cb;
+    private Combine combine;
 
     private List<Dictionary<string, object>> recipeList;
     private Dictionary<string, object> recipe;
@@ -21,20 +21,18 @@ public class CombineUI : MonoBehaviour
     public Button btnCombine;
     private bool combinable;
 
-    public List<playerState> playerStates; // 임시로 플레이어 상태 가져오기 위해 리스트 선언!!!
+    public List<playerState> playerStates; 
 
-    private int selectedChar; // 현재 선택된 캐릭터 넘버, 미선택 시 -1
+    private int selectedChar; // 현재 선택된 캐릭터 넘버, 미선택 시 0, 전체 제어 시 4
     public GameObject BtnChars;
     public Color Shadow;
 
     private void Start()
     {
         /* 임시 설정 */
-
         dm = DataManager.dataManager;
-        cb = GetComponent<Combine>();
+        combine = GetComponent<Combine>();
         recipeList = dm.GetRecipeList();
-
         move = GameObject.Find("Main Camera").GetComponent<MovePointForCam>();
 
         InitCombiner();
@@ -45,29 +43,30 @@ public class CombineUI : MonoBehaviour
             Dictionary<string, object> recipe = recipeList[i];
             MakeBtnRecipe(recipe);
         }
-
-        // 다른 일 하고 있는 캐릭터 있는지 체크하고 있다면 다른일 리본 띄우기
     }
 
-    public void SetRecipeBtn()
+    private void MakeBtnRecipe(Dictionary<string, object> recipe)
     {
-        for (int i = 0; i < recipeParent.transform.childCount; i++)
+        GameObject newRecipe = Instantiate(recipePrefab, recipeParent.transform); // 버튼 오브젝트 생성
+        newRecipe.name = System.Convert.ToString(recipe["comID"]);
+
+        // 아이템 이미지 설정
+        newRecipe.transform.GetChild(0).GetComponent<Image>().sprite = dm.findSprite(newRecipe.name);
+        // 아이템 이름 설정
+        newRecipe.transform.GetChild(1).GetComponent<Text>().text = dm.getName(newRecipe.name);
+        newRecipe.GetComponent<Button>().onClick.AddListener(() => onClickRecipe(recipe));
+
+        if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
+        { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
+            newRecipe.GetComponent<Button>().interactable = false;
+        }
+        else
         {
-            GameObject newRecipe = recipeParent.transform.GetChild(i).gameObject;
-
-            if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
-            { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
-                newRecipe.GetComponent<Button>().interactable = false;
-            }
-            else
-            {
-                newRecipe.GetComponent<Button>().interactable = true;
-            }
-
+            newRecipe.GetComponent<Button>().interactable = true;
         }
     }
 
-    public void InitCombiner()
+    public void InitCombiner() // 조합창 열 때 초기설정
     {
         // 변수 초기화
         recipe = null;
@@ -75,9 +74,10 @@ public class CombineUI : MonoBehaviour
         btnCombine.interactable = false;
         combinable = false;
 
+        // 캐릭터 작업중 UI 표시
         for (int i = 0; i < 3; i++)
         {
-            if (playerStates[i].IsWorking())
+            if (playerStates[i].IsWorking()) 
             {
                 BtnChars.transform.GetChild(i + 1).GetChild(1).gameObject.SetActive(true);
             }
@@ -86,9 +86,7 @@ public class CombineUI : MonoBehaviour
         costInfo.SetActive(false);
         itemInfo.SetActive(false);
 
-        // 레시피 획득 여부 확인하고 isGot에 1 들어간 애들 활성화 시켜줘
-
-        // 현재 선택된 캐릭터 기본 선택되도록 함
+        // 현재 선택된 캐릭터 기본 선택되도록 함, 미선택 시 첫 번째 아이로 설정
         SelectChild(move.getMoveChar());
         if (selectedChar == 0) SelectChild(1);
 
@@ -113,25 +111,21 @@ public class CombineUI : MonoBehaviour
         SetRecipeBtn();
     }
 
-    private void MakeBtnRecipe(Dictionary<string, object> recipe)
+    public void SetRecipeBtn() // 레시피 버튼 활성화 설정
     {
-        GameObject newRecipe = Instantiate(recipePrefab, recipeParent.transform); // 버튼 인스턴스 생성
-        newRecipe.name = System.Convert.ToString(recipe["comID"]);
-
-        // 아이템 이미지 설정
-        newRecipe.transform.GetChild(0).GetComponent<Image>().sprite = dm.findSprite(newRecipe.name);
-        // 아이템 이름 설정
-        newRecipe.transform.GetChild(1).GetComponent<Text>().text = dm.getName(newRecipe.name);
-        newRecipe.GetComponent<Button>().onClick.AddListener(() => onClickRecipe(recipe));
-
-        //if (System.Convert.ToInt16(recipe["isGot"]) == 0)
-        if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
-        { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
-            newRecipe.GetComponent<Button>().interactable = false;
-        }
-        else
+        for (int i = 0; i < recipeParent.transform.childCount; i++)
         {
-            newRecipe.GetComponent<Button>().interactable = true;
+            GameObject newRecipe = recipeParent.transform.GetChild(i).gameObject;
+
+            if (PlayerPrefs.GetInt("isGot" + newRecipe.name, 0) == 0)
+            { // 레시피 획득하지 않은 경우 버튼 선택 비활성화
+                newRecipe.GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                newRecipe.GetComponent<Button>().interactable = true;
+            }
+
         }
     }
 
@@ -186,12 +180,31 @@ public class CombineUI : MonoBehaviour
         costInfo.transform.GetChild(4).GetChild(1).GetComponent<Text>().text
             = " / " + System.Convert.ToInt16(recipe["insight"]).ToString();
 
-        setCharInfo(); // 현재 캐릭터별 소지 재료 수와 통찰력 설정
+        SetCharInfo(); // 현재 캐릭터별 소지 재료 수와 통찰력 설정
     }
 
-    private void setCharInfo()
+    public void SelectChild(int num) // 조합 창의 캐릭터 선택 버튼 눌렀을 경우
     {
-        combinable = true;
+        selectedChar = num;
+        SetCharBtnSelected(selectedChar);
+
+        // 제작 아이템 정보창 업데이트
+        if (itemInfo.activeInHierarchy) SetCharInfo();
+    }
+
+    private void SetCharBtnSelected(int n)
+    {
+        for (int i = 1; i < BtnChars.transform.childCount; i++)
+        {
+            if (i == n) BtnChars.transform.GetChild(i).GetComponent<Image>().color = Shadow;
+            else BtnChars.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+        }
+
+    }
+
+    private void SetCharInfo()
+    {
+        combinable = true; // 조합 가능한지 판단
 
         // 통찰력 설정
         if (selectedChar == 0)     // 선택되지 않았을 경우
@@ -265,42 +278,16 @@ public class CombineUI : MonoBehaviour
                 }
             }
 
-            // 제작 가능 여부 결정
-            checkCombinable();
+            if (combinable) btnCombine.interactable = true;
+            else btnCombine.interactable = false;
         }
-    }
-
-    private void checkCombinable()
-    {
-        if (combinable) btnCombine.interactable = true;
-        else btnCombine.interactable = false;
-    }
-
-    public void SelectChild(int num)
-    {
-        selectedChar = num;
-        SetCharBtnSelected(selectedChar);
-
-        // 제작 아이템 정보창 업데이트
-        if (itemInfo.activeInHierarchy) setCharInfo();
     }
 
     public void StartCombine()
     {
-        Debug.Log("조합 시작!");
+        Debug.Log("조합 시작");
 
         combinePanel.SetActive(false);
-        cb.StartCombine(System.Convert.ToString(recipe["comID"]), selectedChar);
-    }
-
-    private void SetCharBtnSelected(int n)
-    {
-
-        for (int i = 1; i < BtnChars.transform.childCount; i++)
-        {
-            if (i == n) BtnChars.transform.GetChild(i).GetComponent<Image>().color = Shadow;
-            else BtnChars.transform.GetChild(i).GetComponent<Image>().color = Color.white;
-        }
-
+        combine.StartCombine(System.Convert.ToString(recipe["comID"]), selectedChar);
     }
 }

@@ -15,4 +15,6 @@ public class SelectPlayer : MonoBehaviour
     {
         move.MoveChar = num;
     }
+
+    public int GetActivatedPlayer() { return move.MoveChar; }
 }

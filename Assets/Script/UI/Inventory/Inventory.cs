@@ -17,16 +17,13 @@ public class Inventory : MonoBehaviour
     private Button useBtn; // 설명 슬롯의 사용 버튼
     private Button trashBtn; // 설명 슬롯의 버리기 버튼
 
-    public List<GameObject> slots; // 게임 오브젝트의 슬롯들
-    public List<Item> items0; // 0번 애기의 아이템 저장 리스트
-    public List<Item> items1; // 1번 애기의 아이템 저장 리스트
-    public List<Item> items2; // 2번 애기의 아이템 저장 리스트
+    public List<GameObject> slots;
+    public List<GameObject> quickSlots;
 
+    public const int CharMax = 3; // 애기 몇명
+    public const int InvenMax = 6; // 애기 당 최대 인벤토리 슬롯 수
 
-    public int CharMax = 3; // 애기 몇명
-    public int InvenMax = 6; // 애기 당 최대 인벤토리 슬롯 수
-
-    /* 
+    /* 슬롯 번호
      * 0 ~ 5 0번 애기
      * 6 ~ 11 1번 애기
      * 12 ~ 17 2번 애기
@@ -67,6 +64,11 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void RenewInfo()
+    {
+        InfoSlot.gameObject.SetActive(false);
+    }
+
     public void RenewInfo(Slot slot) // 아이템 상세정보 띄우기
     {
         InfoSlot.gameObject.SetActive(true);
@@ -81,27 +83,30 @@ public class Inventory : MonoBehaviour
             useBtn.enabled = true;
         }
 
+        Image image = InfoSlot.GetChild(1).GetComponent<Image>();
+        image.sprite = item.sprite;
+
+        /* 기존 버튼 리스너 모두 제거 */
+        checkBtn.onClick.RemoveAllListeners();
+        useBtn.onClick.RemoveAllListeners();
+        trashBtn.onClick.RemoveAllListeners();
+
+        /* 해당 아이템 슬롯에 맞는 버튼 리스너 붙이기 */
+        useBtn.onClick.AddListener(() => slot.UseItem()); // 아이템 사용 함수 리스너 등록
+        trashBtn.onClick.AddListener(() => slot.ThrowItem()); // 아이템 버리기 함수 리스너 등록
+
         if (!ItemIO.isItemGot(item.ID)) // 처음 줍거나 써본 적 없을 때
         {
             checkBtn.interactable = true; // 체크 버튼 사용 가능
 
             /* 설명 슬롯 설정 */
             InfoSlot.GetChild(0).GetComponent<Text>().text = "???";
-            Image image = InfoSlot.GetChild(1).GetComponent<Image>();
-            image.sprite = item.sprite;
             image.color = Color.black;
             InfoSlot.GetChild(2).GetComponent<Text>().text = "???";
             InfoSlot.GetChild(3).GetComponent<Text>().text = "???";
 
-            /* 기존 버튼 리스너 모두 제거 */
-            checkBtn.onClick.RemoveAllListeners();
-            useBtn.onClick.RemoveAllListeners();
-            trashBtn.onClick.RemoveAllListeners();
-
             /* 버튼 리스너 붙이기 */
             checkBtn.onClick.AddListener(() => slot.CheckItem()); // 아이템 조사 함수 리스너 등록
-            useBtn.onClick.AddListener(() => slot.UseItem()); // 아이템 사용 함수 리스너 등록
-            trashBtn.onClick.AddListener(() => slot.ThrowItem()); // 아이템 버리기 함수 리스너 등록
         }
         else // 조사했거나 사용해 봤을 때
         {
@@ -109,25 +114,10 @@ public class Inventory : MonoBehaviour
 
             /* 설명 슬롯 설정 */
             InfoSlot.GetChild(0).GetComponent<Text>().text = item.name;
-            Image image = InfoSlot.GetChild(1).GetComponent<Image>();
-            image.sprite = item.sprite;
             image.color = Color.white;
             InfoSlot.GetChild(2).GetComponent<Text>().text = item.type.ToString().ToUpper();
             InfoSlot.GetChild(3).GetComponent<Text>().text = item.effect;
-
-            /* 기존 버튼 리스너 모두 제거 */
-            useBtn.onClick.RemoveAllListeners();
-            trashBtn.onClick.RemoveAllListeners();
-
-            /* 버튼 리스너 붙이기 */
-            useBtn.onClick.AddListener(() => slot.UseItem()); // 아이템 사용 함수 리스너 등록
-            trashBtn.onClick.AddListener(() => slot.ThrowItem()); // 아이템 버리기 함수 리스너 등록
         }
-    }
-
-    public void RenewInfo() // 설명 슬롯 끄기
-    {
-        InfoSlot.gameObject.SetActive(false);
     }
 
     public bool AddItem(int ChildNum, Item item) // 슬롯 차있는지 확인 후 슬롯에 addItem
@@ -197,9 +187,9 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void Swap(Slot xFirst, Slot oSecond) // (swap 보조함수) xFirst에 oSecond가 가지고 있던 아이템 넣고 oSecond 비우기
+    public void Swap(Slot xFirst, Slot oSecond) // xFirst에 oSecond가 가지고 있던 아이템 넣고 oSecond 비우기
     {
-        // 두 슬롯의 인벤토리 주인 다를 경우 빠꾸먹이는 부분 추가
+        // 두 슬롯의 인벤토리 주인 다를 경우 막는 부분 추가
 
         Item item = oSecond.ItemReturn();
 
@@ -215,10 +205,12 @@ public class Inventory : MonoBehaviour
 
     public Slot NearDisSlot(Vector3 pos) // 해당 위치 근처에 슬롯 있는지 확인
     {
-        float min = 50000f;
+        float min = 20f;
         int index = -1;
 
         int count = slots.Count;
+
+        Slot slot = null;
 
         for (int i = 0; i < count; i++) // 슬롯 중에 현재 위치와 가장 가까운 슬롯 찾기
         {
@@ -231,8 +223,28 @@ public class Inventory : MonoBehaviour
                 index = i;
             }
         }
+        Debug.Log(index);
 
-        return slots[index].GetComponent<Slot>();
+        if (index < 0)
+        {
+            for (int i = 0; i < quickSlots.Count; i++)
+            {
+                Vector2 sPos = quickSlots[i].transform.GetChild(0).position;
+                float dis = Vector2.Distance(sPos, pos);
+
+                if (dis < min)
+                {
+                    min = dis;
+                    index = i;
+                }
+            }
+
+            if (index >= 0)
+                slot = quickSlots[index].GetComponent<Slot>();
+        }
+        else slot = slots[index].GetComponent<Slot>();
+
+        return slot;
     }
 
     public void RenewInventory() // 아이템 재정렬 (아이템 사이에 빈칸 없도록)

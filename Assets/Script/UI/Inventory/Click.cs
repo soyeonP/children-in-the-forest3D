@@ -37,7 +37,7 @@ public class Click : MonoBehaviour {
 
             if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity) && !EventSystem.current.IsPointerOverGameObject())
             {
-                if (hit.collider.gameObject.tag == "Object") // 오브젝트 클릭했으면
+                if (hit.collider.gameObject.tag == "Object") // 채집 오브젝트
                 {
                     clickedObj = hit.collider.gameObject;
                     GetBtn.SetActive(true); // 클릭 시 채집 버튼 뜨도록
@@ -47,13 +47,12 @@ public class Click : MonoBehaviour {
                     GetBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
                     //GetBtn.transform.position = new Vector2(clickedObj.transform.position.x + 1, clickedObj.transform.position.y + 1);
                 }
-                else if (hit.collider.gameObject.tag == "Huntable")
+                else if (hit.collider.gameObject.tag == "Huntable") // 사냥 오브젝트
                 {
-                    // TODO 새총 보유중인지 확인
+                    // 새총 보유중인지 확인
                     int nowChar = move.getMoveChar();
                     if (ObjManager.objManager.inventory.getItemCount("sling", nowChar - 1) > 0)
                     {
-                        // 아직 새총 추가 안돼서 조건 안 걸어둠
                         clickedObj = hit.collider.gameObject;
 
                         Vector3 objPos = Camera.main.WorldToScreenPoint(clickedObj.transform.position);
@@ -61,10 +60,9 @@ public class Click : MonoBehaviour {
                         // 상호작용 버튼 출력
                         huntBtn.SetActive(true);
                         huntBtn.transform.position = new Vector2(objPos.x + 40, objPos.y + 40);
-                        //}
                     }
                 }
-                else if (hit.collider.gameObject.tag == "Checkable")
+                else if (hit.collider.gameObject.tag == "Checkable") // 조사 오브젝트
                 {
 
                     clickedObj = hit.collider.gameObject;
@@ -106,12 +104,13 @@ public class Click : MonoBehaviour {
 
     }
 
+    
     public void ClickedGetBtn()
     {
         audio.Play();
 
         // 캐릭터에 따라 조사시간 걸리게 설정 (해야함)
-        int charnum = GameObject.Find("Main Camera").GetComponent<MovePointForCam>().getMoveChar();
+        int charnum = move.getMoveChar();
 
         if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;
 
@@ -122,20 +121,18 @@ public class Click : MonoBehaviour {
 
     public void ClickedHuntBtn()
     {
-        // 탄환 발사 이펙트
-        //GameObject bul = Instantiate(bullet);
-        //bul.GetComponent<Rigidbody>().AddForce
-
         int character = move.getMoveChar();
+
+        // 사냥 중 UI 나타나도록 함
         HuntingUI.gameObject.SetActive(true);
-        IEnumerator coroutine = FillImage(HuntingUI, character);
-        StartCoroutine(coroutine);
+        IEnumerator fillHuntingUI = FillImage(HuntingUI, character);
+
+        StartCoroutine(fillHuntingUI);
     }
 
     public void ClickedCheckBtn()
     {
         // 메모 획득
-        // 체크된거 표시하기
         checkBtn.SetActive(false);
 
         int charnum = move.getMoveChar();
@@ -161,11 +158,9 @@ public class Click : MonoBehaviour {
         image.fillAmount = 0;
         image.gameObject.SetActive(false);
 
-        // 일단 걍 토끼가 죽게 하자
-        clickedObj.GetComponent<Animator>().SetTrigger("dead");
+        // 사냥 오브젝트 죽게 함
         clickedObj.GetComponent<Huntable>().Kill();
 
-        // 사냥 버튼 끄기
         huntBtn.SetActive(false);
     }
 

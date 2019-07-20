@@ -1,5 +1,1 @@
-<Child>
-  <Item name="메모" ID="memo_corpse" tool="0" effect="누군가가 남긴 메모" slotNum="0" type="memo" />
-  <Item name="새총" ID="sling" tool="0" effect="자동 사용" slotNum="1" type="tool" />
-  <Item name="독 고기" ID="poison_meat" tool="0" effect="독이 든 고기 - 사용을 누르면 설치할 수 있다" slotNum="6" type="food" />
-</Child>
+<Child />
