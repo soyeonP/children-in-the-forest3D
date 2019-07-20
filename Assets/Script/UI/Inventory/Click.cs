@@ -108,13 +108,12 @@ public class Click : MonoBehaviour {
     public void ClickedGetBtn()
     {
         audio.Play();
-
         // 캐릭터에 따라 조사시간 걸리게 설정 (해야함)
         int charnum = move.getMoveChar();
 
         if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;
 
-        clickedObj.GetComponent<Item>().AddItem(charnum - 1);
+        clickedObj.GetComponent<ItemController>().AddItem(charnum - 1);
         GetBtn.SetActive(false);
         clickedObj = null;
     }
@@ -138,7 +137,7 @@ public class Click : MonoBehaviour {
         int charnum = move.getMoveChar();
         if (charnum == -1 || charnum == 0 || charnum == 4) charnum = 1;
 
-        clickedObj.GetComponent<Item>().AddItem(charnum - 1);
+        clickedObj.GetComponent<ItemController>().AddItem(charnum - 1);
     }
 
     IEnumerator FillImage(Image image, int selChar)

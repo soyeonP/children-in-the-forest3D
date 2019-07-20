@@ -79,9 +79,6 @@ public class DataManager : MonoBehaviour {
                 case "tool":
                     item.type = Item.ItemType.tool;
                     break;
-                case "trap":
-                    item.type = Item.ItemType.trap;
-                    break;
             }
 
             items.Add(item);

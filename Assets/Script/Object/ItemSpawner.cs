@@ -24,7 +24,7 @@ public class ItemSpawner : MonoBehaviour
             GameObject obj = objParent.transform.GetChild(i).gameObject;
             Item item = DataManager.dataManager.GetItem(obj.name);
 
-            obj.AddComponent<Item>();
+            obj.AddComponent<ItemController>();
             obj.AddComponent<BoxCollider>();
 
             if (item.type != Item.ItemType.memo)
@@ -42,13 +42,16 @@ public class ItemSpawner : MonoBehaviour
                 obj.AddComponent<Huntable>();
             }
 
-            Item itemCompo = obj.GetComponent<Item>();
-            itemCompo.name = item.name;
-            itemCompo.ID = item.ID;
-            itemCompo.tool = item.tool;
-            itemCompo.sprite = item.sprite;
-            itemCompo.type = item.type;
-            itemCompo.effect = item.effect;
+            //Item itemCompo = obj.GetComponent<ItemController>().item;
+            Item temp = new Item();
+            temp.name = item.name;
+            temp.ID = item.ID;
+            temp.tool = item.tool;
+            temp.sprite = item.sprite;
+            temp.type = item.type;
+            temp.effect = item.effect;
+
+            obj.GetComponent<ItemController>().item = temp;
         }
 
         /* 랜덤 스폰 설정
@@ -76,13 +79,11 @@ public class ItemSpawner : MonoBehaviour
         GameObject objPrefab = dm.GetObj(item.ID);
         if (objPrefab != null)
         {
-            Debug.Log(objPrefab.name);
-
             GameObject obj = Instantiate(objPrefab, objParent.transform);
-            obj.AddComponent<Item>();
+            obj.AddComponent<ItemController>();
             obj.AddComponent<BoxCollider>();
             obj.tag = "Object";
-            Item itemCompo = obj.GetComponent<Item>();
+            Item itemCompo = new Item();
 
             itemCompo.name = item.name;
             itemCompo.ID = item.ID;
@@ -90,6 +91,8 @@ public class ItemSpawner : MonoBehaviour
             itemCompo.sprite = item.sprite;
             itemCompo.type = item.type;
             itemCompo.effect = item.effect;
+
+            obj.GetComponent<ItemController>().item = itemCompo;
 
             return obj;
         }

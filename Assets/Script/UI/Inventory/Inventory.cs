@@ -74,7 +74,7 @@ public class Inventory : MonoBehaviour
         InfoSlot.gameObject.SetActive(true);
         Item item = slot.ItemReturn();
 
-        if (item.type != Item.ItemType.food && item.type != Item.ItemType.memo && item.type != Item.ItemType.trap)
+        if (item.type != Item.ItemType.food && item.type != Item.ItemType.memo)
         {
             useBtn.enabled = false;
         }
@@ -312,6 +312,5 @@ public class Inventory : MonoBehaviour
 
 
         // 레시피 isgot 설정해주기
-        PlayerPrefs.SetInt("isGotpoison_meat", 1);
-    }
+        PlayerPrefs.SetInt("isGotpoison_meat", 1);    }
 }

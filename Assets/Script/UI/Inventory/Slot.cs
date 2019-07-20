@@ -22,7 +22,9 @@ public class Slot : MonoBehaviour {
     public virtual void AddItem(Item item)
     {
         this.item = item;
-        UpdateInfo(true, item.sprite);
+        if (item != null)
+            UpdateInfo(true, item.sprite);
+        else UpdateInfo(false, DefaultImg);
     }
 
     public void emptyItem()
@@ -75,16 +77,16 @@ public class Slot : MonoBehaviour {
         ObjManager.objManager.inventory.RenewInventory();
     }
 
-    public void UseItem() // 아이템 사용 시
+    public virtual void UseItem() // 아이템 사용 시
     {
         // 해당 아이템 가지고 있는 캐릭터 가져와 상태값 변경
         DataManager dm = DataManager.dataManager;
 
+        childNum = GetChildNum();
 
         switch (item.type)
         {
             case Item.ItemType.food:
-                childNum = System.Convert.ToInt32(gameObject.name) / 6;
                 Children = dm.GetChildren();
                 playerState character = Children[childNum].GetComponent<playerState>();
                 character.ChangeFull(dm.GetFull(item.ID));
@@ -94,24 +96,23 @@ public class Slot : MonoBehaviour {
                 break;
 
             case Item.ItemType.memo:
+                // 메모 패널 열기
+                // 메모 글 불러오기
                 ObjManager.objManager.inventory.OpenMemo(item.ID);
                 break;
 
             case Item.ItemType.trap:
-                // 필드에 오브젝트 생성
                 ItemSpawner spawner = dm.gameObject.GetComponent<ItemSpawner>();
                 GameObject obj = spawner.SpawnObj(item);
 
-                // 오브젝트 위치 설정 - 사용 플레이어 위치로
-                Vector3 charPos = dm.GetChildren()[childNum].transform.position;
+                // 오브젝트 위치 설정
+                Vector3 charPos = dm.GetChildren()[childNum - 1].transform.position;
                 obj.transform.position = new Vector3(charPos.x, obj.GetComponent<BoxCollider>().size.y / 2, charPos.z);
 
                 // 오브젝트 이름, 태그 설정
                 obj.name = item.ID;
                 obj.tag = "trap";
 
-                Debug.Log(item.ID);
-                // 아이템 제거
                 emptyItem();
 
                 break;
@@ -120,6 +121,11 @@ public class Slot : MonoBehaviour {
         /* 인벤토리 새로고침 */
         ObjManager.objManager.inventory.RenewInfo();
         ObjManager.objManager.inventory.RenewInventory();
+    }
+
+    protected virtual int GetChildNum()
+    {
+        return System.Convert.ToInt32(gameObject.name) / 6;
     }
 
     public void ThrowItem() // 아이템 버릴 시

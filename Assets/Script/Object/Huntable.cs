@@ -17,7 +17,7 @@ public class Huntable : MonoBehaviour
 
         dm = DataManager.dataManager;
         Dictionary<string, object> huntable = dm.GetHuntable(id);
-        objData = gameObject.GetComponent<Item>();
+        objData = gameObject.GetComponent<ItemController>().item;
 
         killed = huntable["killedID"].ToString();
         tool = huntable["tool"].ToString();

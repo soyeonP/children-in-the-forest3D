@@ -90,15 +90,15 @@
     <Compile Include="Assets\Script\UI\Combine\CombineUI.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Click.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Inventory.cs" />
-    <Compile Include="Assets\Script\UI\Inventory\Item.cs" />
+    <Compile Include="Assets\Script\UI\Inventory\ItemController.cs" />
     <Compile Include="Assets\Script\UI\Inventory\ItemDrag.cs" />
     <Compile Include="Assets\Script\UI\Inventory\ItemIO.cs" />
     <Compile Include="Assets\Script\UI\Inventory\ObjManager.cs" />
+    <Compile Include="Assets\Script\UI\Inventory\QuickSlotManager.cs" />
     <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
     <Compile Include="Assets\SetSound.cs" />
     <None Include="Assets\Save\ItemGetData.xml" />
     <None Include="Assets\QuickSlotData.xml" />
-    <None Include="Assets\InventoryData.xml" />
     <None Include="Assets\Save\InventoryData.xml" />
     <None Include="Assets\Save\dontremove.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">

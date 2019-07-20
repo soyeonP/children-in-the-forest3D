@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class QuickSlot : Slot
 {
-    public static int nowChild = 1;
+    private QuickSlotManager quickSlotManager;
 
-    public override void SetChildNum(int num)
+    private void Awake()
     {
-        nowChild = num;
+        quickSlotManager = GetComponentInParent<QuickSlotManager>();
     }
 
     public override void UpdateInfo(bool isSlot, Sprite sprite)
     {
         base.UpdateInfo(isSlot, sprite);
-        ItemIO.SaveQuickSlots(nowChild);
+    }
+
+    protected override int GetChildNum()
+    {
+        return quickSlotManager.moveChild;
     }
 }

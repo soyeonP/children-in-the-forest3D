@@ -6,7 +6,7 @@ using System.Xml;
 public sealed class ItemIO : MonoBehaviour {
 
     public GameObject ObjMan;
-    private static int quickSlotCapacity = 2;
+    private static int quickSlotCapacity = 4;
 
     public static void GotItemSave (string id)
     {
@@ -56,98 +56,53 @@ public sealed class ItemIO : MonoBehaviour {
         return false;
     }
 
-    public static void SaveQuickSlots(int childNum)
+    public static void SaveQuickSlots(Item[] quickSlotItems)
     {
         List<GameObject> quickSlots = ObjManager.objManager.inventory.quickSlots;
-        Item[] quickItems = LoadQuickSlotData();
 
         XmlDocument XmlDoc = new XmlDocument();
 
-        for (int i = 0; i < 3; i++)
+        XmlElement child = XmlDoc.CreateElement("child");
+
+        for (int i = 0; i < quickSlotItems.Length; i++)
         {
-            XmlElement child = XmlDoc.CreateElement("child" + i.ToString());
+            //QuickSlot slot = quickSlots[i * quickSlotCapacity + k].GetComponent<QuickSlot>();
+            Item item = quickSlotItems[i];
 
-            if (i == childNum - 1)
+            if (item == null) continue;
+
+            XmlElement setting = XmlDoc.CreateElement("Item");
+
+            setting.SetAttribute("name", item.name);
+            setting.SetAttribute("ID", item.ID);
+            setting.SetAttribute("tool", item.tool.ToString());
+            setting.SetAttribute("effect", item.effect);
+            setting.SetAttribute("slotNum", i.ToString());
+
+            switch (item.type)
             {
-                for (int k = 0; k < quickSlotCapacity; k++)
-                {
-                    QuickSlot slot = quickSlots[k].GetComponent<QuickSlot>();
-
-                    Debug.Log(k);
-                    if (!slot.isSlots()) continue;
-
-                    Item item = slot.ItemReturn();
-                    XmlElement setting = XmlDoc.CreateElement("Item");
-
-                    setting.SetAttribute("name", item.name);
-                    setting.SetAttribute("ID", item.ID);
-                    setting.SetAttribute("tool", item.tool.ToString());
-                    setting.SetAttribute("effect", item.effect);
-                    setting.SetAttribute("slotNum", (i * 2 + k).ToString());
-
-                    switch (item.type)
-                    {
-                        case Item.ItemType.food:
-                            setting.SetAttribute("type", "food");
-                            break;
-                        case Item.ItemType.material:
-                            setting.SetAttribute("type", "material");
-                            break;
-                        case Item.ItemType.memo:
-                            setting.SetAttribute("type", "memo");
-                            break;
-                        case Item.ItemType.tool:
-                            setting.SetAttribute("type", "tool");
-                            break;
-                        case Item.ItemType.trap:
-                            setting.SetAttribute("type", "trap");
-                            break;
-                    }
-
-                    child.AppendChild(setting);
-
-                }
+                case Item.ItemType.food:
+                    setting.SetAttribute("type", "food");
+                    break;
+                case Item.ItemType.material:
+                    setting.SetAttribute("type", "material");
+                    break;
+                case Item.ItemType.memo:
+                    setting.SetAttribute("type", "memo");
+                    break;
+                case Item.ItemType.tool:
+                    setting.SetAttribute("type", "tool");
+                    break;
+                case Item.ItemType.trap:
+                    setting.SetAttribute("type", "trap");
+                    break;
             }
-            else if (quickItems != null)
-            {
-                for (int k = 0; k < quickSlotCapacity; k++)
-                {
-                    Item item = quickItems[i * 2 + k];
-                    if (item == null) continue;
 
-                    XmlElement setting = XmlDoc.CreateElement("Item");
+            child.AppendChild(setting);
 
-                    setting.SetAttribute("name", item.name);
-                    setting.SetAttribute("ID", item.ID);
-                    setting.SetAttribute("tool", item.tool.ToString());
-                    setting.SetAttribute("effect", item.effect);
-                    setting.SetAttribute("slotNum", (i * 2 + k).ToString());
-
-                    switch (item.type)
-                    {
-                        case Item.ItemType.food:
-                            setting.SetAttribute("type", "food");
-                            break;
-                        case Item.ItemType.material:
-                            setting.SetAttribute("type", "material");
-                            break;
-                        case Item.ItemType.memo:
-                            setting.SetAttribute("type", "memo");
-                            break;
-                        case Item.ItemType.tool:
-                            setting.SetAttribute("type", "tool");
-                            break;
-                        case Item.ItemType.trap:
-                            setting.SetAttribute("type", "trap");
-                            break;
-                    }
-
-                    child.AppendChild(setting);
-
-                }
-            }
-            if (child.HasChildNodes) XmlDoc.AppendChild(child);
         }
+
+        XmlDoc.AppendChild(child);
 
         XmlDoc.Save(Application.dataPath + "/QuickSlotData.xml");
     }
@@ -158,52 +113,48 @@ public sealed class ItemIO : MonoBehaviour {
 
         if (!System.IO.File.Exists(Application.dataPath + "/QuickSlotData.xml"))
         {
-            return null;
+            return items;
         }
 
         XmlDocument xmlDoc = new XmlDocument();
         xmlDoc.Load(Application.dataPath + "/QuickSlotData.xml");
 
-        for (int i = 0; i < 3; i++)
+            XmlElement child = xmlDoc["child"];
+
+        foreach (XmlElement itemElement in child.ChildNodes)
         {
-            XmlElement child = xmlDoc["child" + i.ToString()];
+            Item item = new Item();
 
-            if (child == null || !child.HasChildNodes) continue;
-            foreach (XmlElement itemElement in child.ChildNodes)
+            item.name = itemElement.GetAttribute("name");
+            item.ID = itemElement.GetAttribute("ID");
+            item.effect = itemElement.GetAttribute("effect");
+            item.tool = itemElement.GetAttribute("tool");
+            item.sprite = DataManager.dataManager.findSprite(item.ID);
+
+            switch (itemElement.GetAttribute("type"))
             {
-                Item item = new Item();
+                case "food":
+                    item.type = Item.ItemType.food;
+                    break;
 
-                item.name = itemElement.GetAttribute("name");
-                item.ID = itemElement.GetAttribute("ID");
-                item.effect = itemElement.GetAttribute("effect");
-                item.tool = itemElement.GetAttribute("tool");
-                item.sprite = DataManager.dataManager.findSprite(item.ID);
+                case "tool":
+                    item.type = Item.ItemType.tool;
+                    break;
 
-                switch (itemElement.GetAttribute("type"))
-                {
-                    case "food":
-                        item.type = Item.ItemType.food;
-                        break;
+                case "material":
+                    item.type = Item.ItemType.material;
+                    break;
 
-                    case "tool":
-                        item.type = Item.ItemType.tool;
-                        break;
+                case "memo":
+                    item.type = Item.ItemType.memo;
+                    break;
 
-                    case "material":
-                        item.type = Item.ItemType.material;
-                        break;
-
-                    case "memo":
-                        item.type = Item.ItemType.memo;
-                        break;
-
-                    case "trap":
-                        item.type = Item.ItemType.trap;
-                        break;
-                }
-
-                items[System.Convert.ToInt32(itemElement.GetAttribute("slotNum"))] = item;
+                case "trap":
+                    item.type = Item.ItemType.trap;
+                    break;
             }
+
+            items[System.Convert.ToInt32(itemElement.GetAttribute("slotNum"))] = item;
         }
         return items;
     }
@@ -306,6 +257,7 @@ public sealed class ItemIO : MonoBehaviour {
                 case "trap":
                     item.type = Item.ItemType.trap;
                     break;
+
             }
 
             items[System.Convert.ToInt32(itemElement.GetAttribute("slotNum"))] = item;

@@ -17,7 +17,7 @@ public class ItemDrag : MonoBehaviour {
     private void Start()
     {
         slot = GetComponent<Slot>();
-        img = GameObject.FindGameObjectWithTag("DragImg").transform;
+        //img = GameObject.FindGameObjectWithTag("DragImg").transform;
         emptyImg = img.GetComponent<Image>();
     }
 
