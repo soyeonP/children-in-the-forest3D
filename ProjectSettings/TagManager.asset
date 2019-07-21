@@ -16,6 +16,8 @@ TagManager:
   - Checkable
   - attack
   - trap
+  - WayPoint
+  - Werewolf
   layers:
   - Default
   - TransparentFX
